@@ -1,5 +1,5 @@
 import React from "react";
-import ControlledSwitches from './switch.js';
+import ControlledSwitches from "./switch.js";
 // react-bootstrap components
 import {
   Badge,
@@ -10,10 +10,11 @@ import {
   Nav,
   Container,
   Row,
-  Col
+  Col,
 } from "react-bootstrap";
 import BasicTimePicker from "components/time.js";
 import SliderRange from "components/slider.js";
+import SliderTemp from "components/sliderTemp.js";
 
 function Custimer() {
   return (
@@ -23,9 +24,9 @@ function Custimer() {
           <Col md="8">
             <Card>
               <Card.Header>
-                <Card.Title as="h4">커스텀 수정</Card.Title>
+                <Card.Title as="h4">루틴 수정</Card.Title>
                 <Form.Group>
-                  <label>커스텀 명칭</label>
+                  <label>루틴 명칭</label>
                   <Form.Control
                     defaultValue="기본 커스텀"
                     placeholder="커스텀 명칭"
@@ -33,52 +34,52 @@ function Custimer() {
                   ></Form.Control>
                 </Form.Group>
               </Card.Header>
-              <Card.Body style={{
-                paddingBottom:15
-                }}>
+              <Card.Body
+                style={{
+                  paddingBottom: 15,
+                }}
+              >
                 <Form>
                   <Row>
-                    <Col  md="4">
+                    <Col md="4">
                       <Form.Group>
-                      <label>루틴시작 시간</label>
+                        <label>루틴시작 시간</label>
                       </Form.Group>
-                      <BasicTimePicker/>
-                                     
+                      <BasicTimePicker />
                     </Col>
                     <Col className="" md="4">
                       <Form.Group>
-                      <label>루틴종료 시간</label>
+                        <label>루틴종료 시간</label>
                       </Form.Group>
-                      <BasicTimePicker/>
-                                     
-                    </Col>                 
+                      <BasicTimePicker />
+                    </Col>
                   </Row>
                   <Row>
-                    <Col  md="6">
+                    <Col md="6">
                       <Form.Group>
                         <label>온도 루틴</label>
                       </Form.Group>
-                      <SliderRange/>
+                      <SliderTemp />
                     </Col>
-                    <Col  md="6">
+                    <Col md="6">
                       <Form.Group>
                         <label>습도 루틴</label>
                       </Form.Group>
-                      <SliderRange/>
+                      <SliderRange />
                     </Col>
                   </Row>
                   <Row>
-                    <Col  md="6">
+                    <Col md="6">
                       <Form.Group>
                         <label>조도 루틴</label>
                       </Form.Group>
-                      <SliderRange/>
+                      <SliderRange />
                     </Col>
-                    <Col  md="6">
+                    <Col md="6">
                       <Form.Group>
                         <label>CO2 루틴</label>
                       </Form.Group>
-                      <SliderRange/>
+                      <SliderRange />
                     </Col>
                   </Row>
                   <Button
@@ -96,50 +97,50 @@ function Custimer() {
           <Col md="4">
             <Card className="card-user">
               <Card.Body className="all-icons">
-              <Row>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-air-baloon"></i>
-                        <p>에어컨</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-album-2"></i>
-                        <p>히터</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-air-baloon"></i>
-                        <p>가습기</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-album-2"></i>
-                        <p>환풍기</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-air-baloon"></i>
-                        <p>조명</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-album-2"></i>
-                        <p>블라인드</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                  </Row>
+                <Row>
+                  <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
+                    <div className="device_list">
+                      <i className="nc-icon nc-air-baloon"></i>
+                      <p>에어컨</p>
+                      <ControlledSwitches />
+                    </div>
+                  </Col>
+                  <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
+                    <div className="device_list">
+                      <i className="nc-icon nc-album-2"></i>
+                      <p>히터</p>
+                      <ControlledSwitches />
+                    </div>
+                  </Col>
+                  <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
+                    <div className="device_list">
+                      <i className="nc-icon nc-air-baloon"></i>
+                      <p>가습기</p>
+                      <ControlledSwitches />
+                    </div>
+                  </Col>
+                  <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
+                    <div className="device_list">
+                      <i className="nc-icon nc-album-2"></i>
+                      <p>환풍기</p>
+                      <ControlledSwitches />
+                    </div>
+                  </Col>
+                  <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
+                    <div className="device_list">
+                      <i className="nc-icon nc-air-baloon"></i>
+                      <p>조명</p>
+                      <ControlledSwitches />
+                    </div>
+                  </Col>
+                  <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
+                    <div className="device_list">
+                      <i className="nc-icon nc-album-2"></i>
+                      <p>블라인드</p>
+                      <ControlledSwitches />
+                    </div>
+                  </Col>
+                </Row>
               </Card.Body>
             </Card>
           </Col>
