@@ -1,0 +1,18 @@
+.on {background: #007bff;}
+.on  .btn-danger {color: #ffffff;border-color: #20c997;}
+.text-purple {color: darkslateblue;}
+.text-green {color: #28a745;}
+.react-datepicker-wrapper {float:left;width: 18%;max-width: 200px;}
+.react-datepicker-wrapper:after {clear: both;content: '';display: block;}
+.device_list {  text-align: center;
+    padding: 20px 5px 10px 5px;
+    border: 1px solid #e5e5e5;
+    border-radius: 6px;
+    margin: 15px 0;}
+
+.device_list i {
+    font-size: 32px;
+}
+.device_list p{
+    margin-bottom: 0px;
+}
