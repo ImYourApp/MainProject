@@ -31,8 +31,6 @@ import {
 import { notInitialized } from "react-redux/es/utils/useSyncExternalStore.js";
 import { forEachChild } from "typescript";
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
-
-
 const Dashboard = () => {
   const addList = useSelector((state)=>(state.addReport));
   const [action,setAction] = useState('on');

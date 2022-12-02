@@ -9,6 +9,7 @@ import { useDispatch,useSelector } from "react-redux";
 import Chart1 from "components/chart1.js";
 import Chart2 from "components/chart2.js";
 import Chart3 from "components/chart3.js";
+import Chart4 from "components/chart4.js";
 // react-bootstrap components
 import {
   Badge,
@@ -47,12 +48,12 @@ const Report = () => {
   const [startDate, setStartDate] = useState(new Date('2016-01-01'));
   const [endDate, setEndDate] = useState(new Date('2016-01-01'));
   useEffect(()=>{
-    loadPower();
-    greetData('wPower');
-    greetData('mPower');
-    greetData('device');
-    greetData('wPowerChk1');
-    greetData('wPowerChk2');
+    // loadPower();
+    // greetData('wPower');
+    // greetData('mPower');
+    // greetData('device');
+    // greetData('wPowerChk1');
+    // greetData('wPowerChk2');
   },[])
 
   useEffect(()=>{
@@ -131,8 +132,7 @@ const Report = () => {
 
 
   const DatePickerComponent = () => {
-    console.log('달력');
-
+    const dispatch = useDispatch();
     let refStartd = useRef();
     let refEndd = useRef();
     let DateData ={
@@ -154,7 +154,7 @@ const Report = () => {
           setPower(res.data.power);
           setMaxPower(res.data.maxVal);
           console.log('리덕스파워'+reChart1Power)
-          // useDispatch({type:'chart1',chart1_power:res.data.power,chart2_time:res.data.time});
+          dispatch({type:'chart1',chart1_power:'23233'});
           console.log(time);
           console.log(power);
           console.log(Maxpower);
@@ -193,7 +193,7 @@ const Report = () => {
             type="button"
             variant="info"
             style={{
-              lineHeight:0.7
+              lineHeight:1.2
             }}
             onClick={()=>dateAxios()}
           >
@@ -206,66 +206,18 @@ const Report = () => {
   return (
     <>
       <Container fluid>
-
         <Row>
-          <Col md="12">
+          <Col md="7">
             <Card>
               <Card.Header>
-                <Card.Title as="h4">총 전력사용량</Card.Title>
+                <Card.Title as="h4">총 사용전력량</Card.Title>
                 <p className="card-category">24 Hours performance</p>
                 <DatePickerComponent/>
               </Card.Header>
               <Card.Body>
-                <div className="ct-chart" id="chartHours">
-                  <ChartistGraph
-                    data={{
-                      labels:time,
-                      series: [
-                        power,
-                        // [287, 385, 490, 492, 554, 586, 698, 695],
-                        // [67, 152, 143, 240, 287, 335, 435, 437],
-                        // [23, 113, 67, 108, 190, 239, 307, 308],
-                      ],
-                    }}
-                    type="Line"
-                    options={{
-                      low: 0,
-                      high: Maxpower,
-                      showArea: false,
-                      height: "245px",
-                      axisX: {
-                        showGrid: false,
-                      },
-                      lineSmooth: true,
-                      showLine: true,
-                      showPoint: true,
-                      fullWidth: true,
-                      chartPadding: {
-                        right: 50,
-                      },
-                    }}
-                    responsiveOptions={[
-                      [
-                        "screen and (max-width: 640px)",
-                        {
-                          axisX: {
-                            labelInterpolationFnc: function (value) {
-                              return value[0];
-                            },
-                          },
-                        },
-                      ],
-                    ]}
-                  />
-                </div>
+                <Chart3/>
               </Card.Body>
               <Card.Footer>
-                <div className="legend">
-                  <i className="fas fa-circle text-info"></i>
-                  Open <i className="fas fa-circle text-danger"></i>
-                  Click <i className="fas fa-circle text-warning"></i>
-                  Click Second Time
-                </div>
                 <hr></hr>
                 <div className="stats">
                   <i className="fas fa-history"></i>
@@ -274,71 +226,42 @@ const Report = () => {
               </Card.Footer>
             </Card>
           </Col>
-        </Row>
-        <Row>
-          <Col md="12">
-            <Card>
+          <Col md="5">
+            <Card className="card-tasks">
               <Card.Header>
-                <Card.Title as="h4">기기별 사용전력량</Card.Title>
-                <p className="card-category">24 Hours performance</p>
-                <DatePickerComponent/>
+                <Card.Title as="h4">총 사용전력량 주요 리포트</Card.Title>
+                <p className="card-category">Backend development</p>
               </Card.Header>
               <Card.Body>
-                {/* <div className="ct-chart" id="chartHours">
-                  <ChartistGraph
-                    data={{
-                      labels:time,
-                      series: [
-                        power,
-                        [1,2,3,4,1,2,4,4,2,1,2,3,4,3],
-                        [2,3,3,4,1,1,2,3,2,1,2,3,4,3]
-                        // [67, 152, 143, 240, 287, 335, 435, 437],
-                        // [23, 113, 67, 108, 190, 239, 307, 308],
-                      ],
-                    }}
-                    type="Line"
-                    options={{
-                      low: 0,
-                      high: Maxpower,
-                      showArea: false,
-                      height: "245px",
-                      axisX: {
-                        showGrid: false,
-                      },
-                      lineSmooth: true,
-                      showLine: true,
-                      showPoint: true,
-                      fullWidth: true,
-                      chartPadding: {
-                        right: 50,
-                      },
-                    }}
-                    responsiveOptions={[
-                      [
-                        "screen and (max-width: 640px)",
-                        {
-                          axisX: {
-                            labelInterpolationFnc: function (value) {
-                              return value[0];
-                            },
-                          },
-                        },
-                      ],
-                    ]}
-                  />
-                </div> */}
-                <Chart3/>
+                <div className="table-full-width">
+                  <Table>
+                    <tbody>
+                      <tr>
+                        <td>
+                          1.
+                        </td>
+                        <td colSpan={2}>
+                          Sign contract for "What are conference organizers
+                          afraid of?"
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          2.
+                        </td>
+                        <td colSpan={2}>
+                          Lines From Great Russian Literature? Or E-mails From
+                          My Boss?
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
               </Card.Body>
               <Card.Footer>
-                <div className="legend">
-                  <i className="fas fa-circle text-info"></i>
-                  TV <i className="fas fa-circle text-danger"></i>
-                  컴퓨터 <i className="fas fa-circle text-warning"></i>
-                  냉장고
-                </div>
                 <hr></hr>
                 <div className="stats">
-                  <i className="fas fa-history"></i>
+                  <i className="now-ui-icons loader_refresh spin"></i>
                   Updated 3 minutes ago
                 </div>
               </Card.Footer>
@@ -360,7 +283,7 @@ const Report = () => {
             <Col md="8">
               <Card>
                 <Card.Header>
-                  <Card.Title as="h4">디바이스 관리</Card.Title>
+                  <Card.Title as="h4">전력량 사용 과거 비교 통계</Card.Title>
                   <p className="card-category">Last Campaign Performance</p>
                 </Card.Header>
                 <Card.Body className="all-icons">
@@ -373,55 +296,103 @@ const Report = () => {
 
                 </Card.Body>
               </Card>
-            </Col>
+          </Col>
+        </Row>
+        <Row>
+          <Col md="6">
+            <Card className="card-tasks">
+              <Card.Header>
+                <Card.Title as="h4">총 사용전력량 주요 리포트</Card.Title>
+                <p className="card-category">Backend development</p>
+              </Card.Header>
+              <Card.Body>
+                <div className="table-full-width">
+                  <Table>
+                    <tbody>
+                      <tr>
+                        <td>
+                          1.
+                        </td>
+                        <td colSpan={2}>
+                          Sign contract for "What are conference organizers
+                          afraid of?"
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          2.
+                        </td>
+                        <td colSpan={2}>
+                          Lines From Great Russian Literature? Or E-mails From
+                          My Boss?
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+              </Card.Body>
+              <Card.Footer>
+                <hr></hr>
+                <div className="stats">
+                  <i className="now-ui-icons loader_refresh spin"></i>
+                  Updated 3 minutes ago
+                </div>
+              </Card.Footer>
+            </Card>
+          </Col>
+          <Col md="6">
+            <Card className="card-tasks">
+              <Card.Header>
+                <Card.Title as="h4">전력량 사용 과거 비교 통계 주요 리포트</Card.Title>
+                <p className="card-category">Backend development</p>
+              </Card.Header>
+              <Card.Body>
+                <div className="table-full-width">
+                  <Table>
+                    <tbody>
+                      <tr>
+                        <td>
+                          1.
+                        </td>
+                        <td colSpan={2}>
+                          Sign contract for "What are conference organizers
+                          afraid of?"
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          2.
+                        </td>
+                        <td colSpan={2}>
+                          Lines From Great Russian Literature? Or E-mails From
+                          My Boss?
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+              </Card.Body>
+              <Card.Footer>
+                <hr></hr>
+                <div className="stats">
+                  <i className="now-ui-icons loader_refresh spin"></i>
+                  Updated 3 minutes ago
+                </div>
+              </Card.Footer>
+            </Card>
+          </Col>
         </Row>
         <Row>
           <Col md="6">
             <Card>
               <Card.Header>
-                <Card.Title as="h4">한주 전력비교</Card.Title>
+                <Card.Title as="h4">다음달 예상되는 전력사용량 </Card.Title>
                 <p className="card-category">All products including Taxes</p>
               </Card.Header>
               <Card.Body>
-                <div className="ct-chart" id="chartActivity">
-                  <ChartistGraph
-                    data={{
-                      labels:weekend,
-                      series: [
-                       thisPower,
-                       lastPower
-                      ],
-                    }}
-                    type="Bar"
-                    options={{
-                      seriesBarDistance: 10,
-                      axisX: {
-                        showGrid: false,
-                      },
-                      height: "245px",
-                    }}
-                    responsiveOptions={[
-                      [
-                        "screen and (max-width: 640px)",
-                        {
-                          seriesBarDistance: 5,
-                          axisX: {
-                            labelInterpolationFnc: function (value) {
-                              return value[0];
-                            },
-                          },
-                        },
-                      ],
-                    ]}
-                  />
-                </div>
+                <Chart4/>
               </Card.Body>
               <Card.Footer>
-                <div className="legend">
-                  <i className="fas fa-circle text-info"></i>
-                  이번주 사용 전력량 <i className="fas fa-circle text-danger"></i>
-                  지난주 사용 전력량
-                </div>
                 <hr></hr>
                 <div className="stats">
                   <i className="fas fa-check"></i>
@@ -433,7 +404,7 @@ const Report = () => {
           <Col md="6">
             <Card className="card-tasks">
               <Card.Header>
-                <Card.Title as="h4">최신 주요 리포트</Card.Title>
+                <Card.Title as="h4">다음달 예상되는 전력사용량 주요 리포트</Card.Title>
                 <p className="card-category">Backend development</p>
               </Card.Header>
               <Card.Body>
