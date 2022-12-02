@@ -47,12 +47,12 @@ const Report = () => {
   const [startDate, setStartDate] = useState(new Date('2016-01-01'));
   const [endDate, setEndDate] = useState(new Date('2016-01-01'));
   useEffect(()=>{
-    loadPower();
-    greetData('wPower');
-    greetData('mPower');
-    greetData('device');
-    greetData('wPowerChk1');
-    greetData('wPowerChk2');
+    // loadPower();
+    // greetData('wPower');
+    // greetData('mPower');
+    // greetData('device');
+    // greetData('wPowerChk1');
+    // greetData('wPowerChk2');
   },[])
 
   useEffect(()=>{
@@ -131,8 +131,6 @@ const Report = () => {
 
 
   const DatePickerComponent = () => {
-    console.log('달력');
-
     let refStartd = useRef();
     let refEndd = useRef();
     let DateData ={
@@ -149,15 +147,20 @@ const Report = () => {
           console.log('성공');
           // let dt = new Date(endDate);
           // dt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-          
+          const list = '';
+          res.data.power.map((res)=>{
+            list = list+','+res
+          })
+          console.log('리덕스파워'+list);
+          // useDispatch({type:'chart1',chart1_power:res.data.power});
           setTime(res.data.time);
           setPower(res.data.power);
           setMaxPower(res.data.maxVal);
-          console.log('리덕스파워'+reChart1Power)
-          // useDispatch({type:'chart1',chart1_power:res.data.power,chart2_time:res.data.time});
-          console.log(time);
-          console.log(power);
-          console.log(Maxpower);
+          // console.log('리덕스파워'+reChart1Power)
+
+          // console.log(time);
+          // console.log(power);
+          // console.log(Maxpower);
 
           console.log('리덕스파워'+reChart1Power)
         
@@ -176,6 +179,7 @@ const Report = () => {
             name='strDate'
             ref={refStartd}
             dateFormat="yyyy-MM-dd"
+            style={{innerWidth:300}}
           />
           <DatePicker
             selected={endDate}
@@ -193,7 +197,7 @@ const Report = () => {
             type="button"
             variant="info"
             style={{
-              lineHeight:0.7
+              lineHeight:1.2
             }}
             onClick={()=>dateAxios()}
           >
@@ -206,80 +210,11 @@ const Report = () => {
   return (
     <>
       <Container fluid>
-
         <Row>
-          <Col md="12">
+          <Col md="7">
             <Card>
               <Card.Header>
-                <Card.Title as="h4">총 전력사용량</Card.Title>
-                <p className="card-category">24 Hours performance</p>
-                <DatePickerComponent/>
-              </Card.Header>
-              <Card.Body>
-                <div className="ct-chart" id="chartHours">
-                  <ChartistGraph
-                    data={{
-                      labels:time,
-                      series: [
-                        power,
-                        // [287, 385, 490, 492, 554, 586, 698, 695],
-                        // [67, 152, 143, 240, 287, 335, 435, 437],
-                        // [23, 113, 67, 108, 190, 239, 307, 308],
-                      ],
-                    }}
-                    type="Line"
-                    options={{
-                      low: 0,
-                      high: Maxpower,
-                      showArea: false,
-                      height: "245px",
-                      axisX: {
-                        showGrid: false,
-                      },
-                      lineSmooth: true,
-                      showLine: true,
-                      showPoint: true,
-                      fullWidth: true,
-                      chartPadding: {
-                        right: 50,
-                      },
-                    }}
-                    responsiveOptions={[
-                      [
-                        "screen and (max-width: 640px)",
-                        {
-                          axisX: {
-                            labelInterpolationFnc: function (value) {
-                              return value[0];
-                            },
-                          },
-                        },
-                      ],
-                    ]}
-                  />
-                </div>
-              </Card.Body>
-              <Card.Footer>
-                <div className="legend">
-                  <i className="fas fa-circle text-info"></i>
-                  Open <i className="fas fa-circle text-danger"></i>
-                  Click <i className="fas fa-circle text-warning"></i>
-                  Click Second Time
-                </div>
-                <hr></hr>
-                <div className="stats">
-                  <i className="fas fa-history"></i>
-                  Updated 3 minutes ago
-                </div>
-              </Card.Footer>
-            </Card>
-          </Col>
-        </Row>
-        <Row>
-          <Col md="12">
-            <Card>
-              <Card.Header>
-                <Card.Title as="h4">기기별 사용전력량</Card.Title>
+                <Card.Title as="h4">총 사용전력량</Card.Title>
                 <p className="card-category">24 Hours performance</p>
                 <DatePickerComponent/>
               </Card.Header>
@@ -330,15 +265,79 @@ const Report = () => {
                 <Chart3/>
               </Card.Body>
               <Card.Footer>
-                <div className="legend">
-                  <i className="fas fa-circle text-info"></i>
-                  TV <i className="fas fa-circle text-danger"></i>
-                  컴퓨터 <i className="fas fa-circle text-warning"></i>
-                  냉장고
-                </div>
                 <hr></hr>
                 <div className="stats">
                   <i className="fas fa-history"></i>
+                  Updated 3 minutes ago
+                </div>
+              </Card.Footer>
+            </Card>
+          </Col>
+          <Col md="5">
+            <Card className="card-tasks">
+              <Card.Header>
+                <Card.Title as="h4">총 사용전력량 주요 리포트</Card.Title>
+                <p className="card-category">Backend development</p>
+              </Card.Header>
+              <Card.Body>
+                <div className="table-full-width">
+                  <Table>
+                    <tbody>
+                      <tr>
+                        <td>
+                          1.
+                        </td>
+                        <td>
+                          Sign contract for "What are conference organizers afraid of?"
+                        </td>
+                        <td className="td-actions text-right">
+                        
+                          <OverlayTrigger
+                            overlay={
+                              <Tooltip id="tooltip-506045838">Remove..</Tooltip>
+                            }
+                          >
+                            <Button
+                              className="btn-simple btn-link p-1"
+                              type="button"
+                              variant="danger"
+                            >
+                              <i className="fas fa-times"></i>
+                            </Button>
+                          </OverlayTrigger>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>
+                          2.
+                        </td>
+                        <td>
+                          Lines From Great Russian Literature? Or E-mails From  My Boss?
+                        </td>
+                        <td className="td-actions text-right">
+                          <OverlayTrigger
+                            overlay={
+                              <Tooltip id="tooltip-21130535">Remove..</Tooltip>
+                            }
+                          >
+                            <Button
+                              className="btn-simple btn-link p-1"
+                              type="button"
+                              variant="danger"
+                            >
+                              <i className="fas fa-times"></i>
+                            </Button>
+                          </OverlayTrigger>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </Table>
+                </div>
+              </Card.Body>
+              <Card.Footer>
+                <hr></hr>
+                <div className="stats">
+                  <i className="now-ui-icons loader_refresh spin"></i>
                   Updated 3 minutes ago
                 </div>
               </Card.Footer>

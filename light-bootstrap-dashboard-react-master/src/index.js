@@ -42,7 +42,7 @@ function reducer(currentState, action) {
     return {
       alertCount: 0,
       addReport: '',
-      chart1_power:'0'
+      chart1_power:''
 
     };
   }
@@ -51,8 +51,12 @@ function reducer(currentState, action) {
   }
 
   if (action.type == 'chart1') {
-    currentState.chart1_power= action.chart1_power,
-    currentState.chart1_time= action.chart1_time
+    const list = '';
+    console.log('chart1 리덕스'+action.chart1_power);
+
+    currentState.chart1_power= list;
+    console.log('chart1 리덕스'+list);
+    // currentState.chart1_time= action.chart1_time
   }
 
   if (action.type == 'addReport') {

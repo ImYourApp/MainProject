@@ -48,12 +48,12 @@ const Dashboard = () => {
   const [startDate, setStartDate] = useState(new Date('2016-01-01'));
   const [endDate, setEndDate] = useState(new Date('2016-01-01'));
   useEffect(()=>{
-    loadPower();
-    greetData('wPower');
-    greetData('mPower');
-    greetData('device');
-    greetData('wPowerChk1');
-    greetData('wPowerChk2');
+    // loadPower();
+    // greetData('wPower');
+    // greetData('mPower');
+    // greetData('device');
+    // greetData('wPowerChk1');
+    // greetData('wPowerChk2');
   },[])
 
   useEffect(()=>{
