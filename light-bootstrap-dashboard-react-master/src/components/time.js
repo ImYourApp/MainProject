@@ -6,12 +6,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 
 export default function BasicTimePicker() {
-  const [strvalue, setStrValue] = React.useState(null);
-  const [endvalue, setEndValue] = React.useState(null);
+  const [strvalue, setStrValue] = React.useState();
+  const [endvalue, setEndValue] = React.useState();
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TimePicker
-        label="Basic example"
         value={strvalue}
         onChange={(newValue) => {
             setStrValue(newValue);
