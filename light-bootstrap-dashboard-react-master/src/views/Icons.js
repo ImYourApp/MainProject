@@ -2,7 +2,7 @@ import React from "react";
 
 // 추가
 import { Link } from "react-router-dom";
-import ControlledSwitches from './Switch.js';
+import ControlledSwitches from './switch.js';
 import IconInfoRoute from "views/Info"
 
 // 이 2개는 스위치용으로 만들었다가 이제 안 쓰는데 혹시 몰라서 넣어둠
