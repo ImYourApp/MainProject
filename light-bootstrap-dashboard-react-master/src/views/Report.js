@@ -47,12 +47,12 @@ const Report = () => {
   const [startDate, setStartDate] = useState(new Date('2016-01-01'));
   const [endDate, setEndDate] = useState(new Date('2016-01-01'));
   useEffect(()=>{
-    loadPower();
-    greetData('wPower');
-    greetData('mPower');
-    greetData('device');
-    greetData('wPowerChk1');
-    greetData('wPowerChk2');
+    // loadPower();
+    // greetData('wPower');
+    // greetData('mPower');
+    // greetData('device');
+    // greetData('wPowerChk1');
+    // greetData('wPowerChk2');
   },[])
 
   useEffect(()=>{
@@ -131,8 +131,7 @@ const Report = () => {
 
 
   const DatePickerComponent = () => {
-    console.log('달력');
-
+    const dispatch = useDispatch();
     let refStartd = useRef();
     let refEndd = useRef();
     let DateData ={
@@ -154,7 +153,7 @@ const Report = () => {
           setPower(res.data.power);
           setMaxPower(res.data.maxVal);
           console.log('리덕스파워'+reChart1Power)
-          // useDispatch({type:'chart1',chart1_power:res.data.power,chart2_time:res.data.time});
+          dispatch({type:'chart1',chart1_power:'23233'});
           console.log(time);
           console.log(power);
           console.log(Maxpower);
@@ -193,7 +192,7 @@ const Report = () => {
             type="button"
             variant="info"
             style={{
-              lineHeight:0.7
+              lineHeight:1.2
             }}
             onClick={()=>dateAxios()}
           >
