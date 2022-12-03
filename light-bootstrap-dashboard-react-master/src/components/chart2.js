@@ -6,7 +6,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function Chart2() {
     const data = {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: ['스마트조명', '에어컨', '히터', '공기청정기', '가습기', '스마트블라인드'],
         datasets: [
           {
             label: '# of Votes',

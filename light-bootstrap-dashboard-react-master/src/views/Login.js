@@ -111,7 +111,6 @@ function Login() {
                 {logError ? <h6 Class='mb-3' style={{color:"red"}}>&nbsp;아이디 또는 비밀번호를 잘못 입력했습니다.</h6> : <br></br>}
                 <MDBBtn className='w-100 mb-4' onClick={sendLogin} size='lg'>로그인</MDBBtn>
 
-
                 <div className="text-center mt-4 font-weight-light">
                   <h6>계정이 없으신가요? &nbsp;<Link to="/join">회원가입</Link></h6>
                 </div>
