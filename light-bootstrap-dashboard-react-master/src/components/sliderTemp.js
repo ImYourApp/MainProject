@@ -5,12 +5,12 @@ import $ from "jquery";
 import "ion-rangeslider/css/ion.rangeSlider.min.css";
 import "ion-rangeslider/js/ion.rangeSlider.min.js";
 
-class SliderRange extends React.Component {
+class SliderTemp extends React.Component {
   componentDidMount() {
     $(".js-range-slider").ionRangeSlider({
       type: "double",
-      min: -15,
-      max: 45,
+      min: -10,
+      max: 35,
       from: -15,
       to: -15,
       grid: true,
@@ -23,13 +23,13 @@ class SliderRange extends React.Component {
         <input
           class="js-range-slider"
           type="range"
-          name="my_name"
-          min="-15"
-          max="45"
+          name="slider_temp"
+          min="-10"
+          max="35"
           value="0"
         />
       </div>
     );
   }
 }
-export default SliderRange;
+export default SliderTemp;

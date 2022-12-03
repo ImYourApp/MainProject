@@ -58,28 +58,28 @@ function Custimer() {
                     <Col md="6">
                       <Form.Group>
                         <label>온도 루틴</label>
-                      </Form.Group>
                       <SliderTemp />
+                      </Form.Group>
                     </Col>
                     <Col md="6">
                       <Form.Group>
                         <label>습도 루틴</label>
-                      </Form.Group>
                       <SliderRange />
+                      </Form.Group>
                     </Col>
                   </Row>
                   <Row>
                     <Col md="6">
                       <Form.Group>
                         <label>조도 루틴</label>
-                      </Form.Group>
                       <SliderRange />
+                      </Form.Group>
                     </Col>
                     <Col md="6">
                       <Form.Group>
                         <label>CO2 루틴</label>
-                      </Form.Group>
                       <SliderRange />
+                      </Form.Group>
                     </Col>
                   </Row>
                   <Button
