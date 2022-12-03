@@ -1,11 +1,11 @@
 import React from "react";
 import ChartistGraph from "react-chartist";
-import { useState,Component,useRef,useEffect } from "react";
-import axios from 'axios';
-import DatePicker from 'react-datepicker';
+import { useState, Component, useRef, useEffect } from "react";
+import axios from "axios";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import ControlledSwitches from './switch.js';
-import { useDispatch,useSelector } from "react-redux";
+import ControlledSwitches from "../components/Switch.js";
+import { useDispatch, useSelector } from "react-redux";
 import Chart1 from "components/chart1.js";
 import Chart2 from "components/chart2.js";
 import Chart3 from "components/chart3.js";
@@ -31,194 +31,216 @@ import {
 } from "react-bootstrap";
 
 const Report = () => {
-  const addList = useSelector((state)=>(state.addReport));
-  const reChart1Power = useSelector((state)=>(state.chart1_power));
-  const reChart1Time = useSelector((state)=>(state.chart1_time));
-  const [action,setAction] = useState('on');
-  const [time,setTime] = useState(["00시","02시","04시","06시","08시","10시","12시","14시","16시","18시","20시","22시","23시"]);
-  const [power,setPower] = useState([]);
-  const [mpower,setmPower] = useState('0');
-  const [wpower,setwPower] = useState('0');
-  const [deviceCnt,setDeviceCnt] = useState('0');
-  const [Maxpower,setMaxPower] = useState([5]);
-  const [weekend,setWeekend] = useState(['일','월','화','수','목','금','토']);
-  const [lastPower,setLastPower] = useState([]);
-  const [thisPower,setthisPower] = useState([]);
-  const [startDate, setStartDate] = useState(new Date('2016-01-01'));
-  const [endDate, setEndDate] = useState(new Date('2016-01-01'));
-  useEffect(()=>{
+  const addList = useSelector((state) => state.addReport);
+  const reChart1Power = useSelector((state) => state.chart1_power);
+  const reChart1Time = useSelector((state) => state.chart1_time);
+  const [action, setAction] = useState("on");
+  const [time, setTime] = useState([
+    "00시",
+    "02시",
+    "04시",
+    "06시",
+    "08시",
+    "10시",
+    "12시",
+    "14시",
+    "16시",
+    "18시",
+    "20시",
+    "22시",
+    "23시",
+  ]);
+  const [power, setPower] = useState([]);
+  const [mpower, setmPower] = useState("0");
+  const [wpower, setwPower] = useState("0");
+  const [deviceCnt, setDeviceCnt] = useState("0");
+  const [Maxpower, setMaxPower] = useState([5]);
+  const [weekend, setWeekend] = useState([
+    "일",
+    "월",
+    "화",
+    "수",
+    "목",
+    "금",
+    "토",
+  ]);
+  const [lastPower, setLastPower] = useState([]);
+  const [thisPower, setthisPower] = useState([]);
+  const [startDate, setStartDate] = useState(new Date("2016-01-01"));
+  const [endDate, setEndDate] = useState(new Date("2016-01-01"));
+  useEffect(() => {
     // loadPower();
     // greetData('wPower');
     // greetData('mPower');
     // greetData('device');
     // greetData('wPowerChk1');
     // greetData('wPowerChk2');
-  },[])
+  }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     AddHtml();
-  },[addList])
+  }, [addList]);
 
-  const loadPower = ()=>{
-
-    console.log('loadPower function')
-    if(power.length == 0){
-
-      axios.post('http://127.0.0.1:3001/db',{
-        type:'power'
-      })
-      .then((res)=>{
-          
-          console.log('성공');
+  const loadPower = () => {
+    console.log("loadPower function");
+    if (power.length == 0) {
+      axios
+        .post("http://127.0.0.1:3001/db", {
+          type: "power",
+        })
+        .then((res) => {
+          console.log("성공");
           setTime(res.data.time);
           setPower(res.data.power);
           setMaxPower(res.data.maxVal);
           console.log(time);
           console.log(power);
           console.log(Maxpower);
-        
-      })
-      .catch(()=>{console.log('살패')})
+        })
+        .catch(() => {
+          console.log("살패");
+        });
     }
-  }
+  };
 
   function greetData(type) {
-    axios.post('http://127.0.0.1:3001/total',{
-      type:type
-    })
-    .then((res)=>{
-        
-        console.log('성공');
+    axios
+      .post("http://127.0.0.1:3001/total", {
+        type: type,
+      })
+      .then((res) => {
+        console.log("성공");
 
-        if(type=='mPower'){
+        if (type == "mPower") {
           setmPower(res.data.power);
           console.log(mpower);
-        }else if(type=='wPower'){
+        } else if (type == "wPower") {
           setwPower(res.data.power);
           console.log(wpower);
-        }else if(type=='device'){
+        } else if (type == "device") {
           setDeviceCnt(res.data.device);
           console.log(deviceCnt);
-        }else if(type=='wPowerChk1'){
+        } else if (type == "wPowerChk1") {
           //이번주
-          console.log('이번주'+res.data.power);
+          console.log("이번주" + res.data.power);
           setthisPower(res.data.power);
           // console.log('이번주'+thisPower);
-        }else if(type=='wPowerChk2'){
+        } else if (type == "wPowerChk2") {
           // const wPowe = res.data.power; //지난주
           setLastPower(res.data.power);
-          console.log('지난주'+res.data.power);
+          console.log("지난주" + res.data.power);
         }
-    })
-    .catch(()=>{console.log('살패')})
+      })
+      .catch(() => {
+        console.log("살패");
+      });
   }
 
-
-  const AddHtml=() =>{
+  const AddHtml = () => {
     // console.log('addHtml'+addList);
-    const arrtext = addList.substr(1).split(',');
-    let html = ''
-    for(let i =0; i < arrtext.length;i++){
-      html+=arrtext[i];
+    const arrtext = addList.substr(1).split(",");
+    let html = "";
+    for (let i = 0; i < arrtext.length; i++) {
+      html += arrtext[i];
       // console.log('html'+html);
     }
-    return(
+    return (
       <>
-        <tbody dangerouslySetInnerHTML={{ __html: html }} ></tbody>
+        <tbody dangerouslySetInnerHTML={{ __html: html }}></tbody>
       </>
     );
-  }
-
+  };
 
   const DatePickerComponent = () => {
     const dispatch = useDispatch();
     let refStartd = useRef();
     let refEndd = useRef();
-    let DateData ={
-      start : startDate,
-      end : endDate
-    }
-    function dateAxios(){
+    let DateData = {
+      start: startDate,
+      end: endDate,
+    };
+    function dateAxios() {
       console.log(DateData.start);
-      axios.post('http://127.0.0.1:3001/db',{
-        date:DateData,
-        type:'power'
-      })
-      .then((res)=>{
-          console.log('성공');
+      axios
+        .post("http://127.0.0.1:3001/db", {
+          date: DateData,
+          type: "power",
+        })
+        .then((res) => {
+          console.log("성공");
           // let dt = new Date(endDate);
           // dt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-          
+
           setTime(res.data.time);
           setPower(res.data.power);
           setMaxPower(res.data.maxVal);
-          console.log('리덕스파워'+reChart1Power)
-          dispatch({type:'chart1',chart1_power:'23233'});
+          console.log("리덕스파워" + reChart1Power);
+          dispatch({ type: "chart1", chart1_power: "23233" });
           console.log(time);
           console.log(power);
           console.log(Maxpower);
 
-          console.log('리덕스파워'+reChart1Power)
-        
-      })
-      .catch(()=>{console.log('살패')})
+          console.log("리덕스파워" + reChart1Power);
+        })
+        .catch(() => {
+          console.log("살패");
+        });
     }
-  
+
     return (
       <>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            selectsStart
-            startDate={startDate}
-            endDate={endDate}
-            name='strDate'
-            ref={refStartd}
-            dateFormat="yyyy-MM-dd"
-          />
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            selectsEnd
-            startDate={startDate}
-            endDate={endDate}
-            minDate={startDate}
-            name='endDate'
-            ref={refEndd}
-            dateFormat="yyyy-MM-dd"
-          />
-          <Button
-            className="btn-fill pull-right"
-            type="button"
-            variant="info"
-            style={{
-              lineHeight:1.2
-            }}
-            onClick={()=>dateAxios()}
-          >
-            조회
-          </Button>
+        <DatePicker
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
+          selectsStart
+          startDate={startDate}
+          endDate={endDate}
+          name="strDate"
+          ref={refStartd}
+          dateFormat="yyyy-MM-dd"
+        />
+        <DatePicker
+          selected={endDate}
+          onChange={(date) => setEndDate(date)}
+          selectsEnd
+          startDate={startDate}
+          endDate={endDate}
+          minDate={startDate}
+          name="endDate"
+          ref={refEndd}
+          dateFormat="yyyy-MM-dd"
+        />
+        <Button
+          className="btn-fill pull-right"
+          type="button"
+          variant="info"
+          style={{
+            lineHeight: 1.2,
+          }}
+          onClick={() => dateAxios()}
+        >
+          조회
+        </Button>
       </>
     );
   };
-  console.log('111111');
+  console.log("111111");
   return (
     <>
       <Container fluid>
-
         <Row>
           <Col md="12">
             <Card>
               <Card.Header>
                 <Card.Title as="h4">총 전력사용량</Card.Title>
                 <p className="card-category">24 Hours performance</p>
-                <DatePickerComponent/>
+                <DatePickerComponent />
               </Card.Header>
               <Card.Body>
                 <div className="ct-chart" id="chartHours">
                   <ChartistGraph
                     data={{
-                      labels:time,
+                      labels: time,
                       series: [
                         power,
                         // [287, 385, 490, 492, 554, 586, 698, 695],
@@ -280,7 +302,7 @@ const Report = () => {
               <Card.Header>
                 <Card.Title as="h4">기기별 사용전력량</Card.Title>
                 <p className="card-category">24 Hours performance</p>
-                <DatePickerComponent/>
+                <DatePickerComponent />
               </Card.Header>
               <Card.Body>
                 {/* <div className="ct-chart" id="chartHours">
@@ -326,7 +348,7 @@ const Report = () => {
                     ]}
                   />
                 </div> */}
-                <Chart3/>
+                <Chart3 />
               </Card.Body>
               <Card.Footer>
                 <div className="legend">
@@ -346,33 +368,37 @@ const Report = () => {
         </Row>
         <Row>
           <Col md="4">
-              <Card>
-                <Card.Header>
-                  <Card.Title as="h4">디바이스 전력사용 통계</Card.Title>
-                  <p className="card-category">Last Campaign Performance</p>
-                </Card.Header>
-                <Card.Body>
-                  <Chart2/>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md="8">
-              <Card>
-                <Card.Header>
-                  <Card.Title as="h4">디바이스 관리</Card.Title>
-                  <p className="card-category">Last Campaign Performance</p>
-                </Card.Header>
-                <Card.Body className="all-icons">
-                  <Row>
-                    <Col className="font-icon-list" lg="12" md="12" sm="12" xs="12">
-                      <Chart1/>
-                    </Col>
-                  
-                  </Row>
-
-                </Card.Body>
-              </Card>
-            </Col>
+            <Card>
+              <Card.Header>
+                <Card.Title as="h4">디바이스 전력사용 통계</Card.Title>
+                <p className="card-category">Last Campaign Performance</p>
+              </Card.Header>
+              <Card.Body>
+                <Chart2 />
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md="8">
+            <Card>
+              <Card.Header>
+                <Card.Title as="h4">디바이스 관리</Card.Title>
+                <p className="card-category">Last Campaign Performance</p>
+              </Card.Header>
+              <Card.Body className="all-icons">
+                <Row>
+                  <Col
+                    className="font-icon-list"
+                    lg="12"
+                    md="12"
+                    sm="12"
+                    xs="12"
+                  >
+                    <Chart1 />
+                  </Col>
+                </Row>
+              </Card.Body>
+            </Card>
+          </Col>
         </Row>
         <Row>
           <Col md="6">
@@ -385,11 +411,8 @@ const Report = () => {
                 <div className="ct-chart" id="chartActivity">
                   <ChartistGraph
                     data={{
-                      labels:weekend,
-                      series: [
-                       thisPower,
-                       lastPower
-                      ],
+                      labels: weekend,
+                      series: [thisPower, lastPower],
                     }}
                     type="Bar"
                     options={{
@@ -418,7 +441,8 @@ const Report = () => {
               <Card.Footer>
                 <div className="legend">
                   <i className="fas fa-circle text-info"></i>
-                  이번주 사용 전력량 <i className="fas fa-circle text-danger"></i>
+                  이번주 사용 전력량{" "}
+                  <i className="fas fa-circle text-danger"></i>
                   지난주 사용 전력량
                 </div>
                 <hr></hr>
@@ -438,7 +462,7 @@ const Report = () => {
               <Card.Body>
                 <div className="table-full-width">
                   <Table>
-                      <AddHtml/>
+                    <AddHtml />
                   </Table>
                 </div>
               </Card.Body>
@@ -455,6 +479,6 @@ const Report = () => {
       </Container>
     </>
   );
-}
+};
 
 export default Report;

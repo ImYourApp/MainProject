@@ -1,5 +1,5 @@
 import React from "react";
-import ControlledSwitches from "./switch.js";
+import ControlledSwitches from "../components/Switch.js";
 // react-bootstrap components
 import {
   Badge,
