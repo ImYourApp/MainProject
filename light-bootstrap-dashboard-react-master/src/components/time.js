@@ -11,7 +11,6 @@ export default function BasicTimePicker() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TimePicker
-        type="time"
         value={strvalue}
         onChange={(newValue) => {
           setStrValue(newValue);
