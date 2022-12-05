@@ -43,7 +43,7 @@ function TableList() {
                     <tr>
                       <td>1</td>
                       <td>
-                        <NavLink to="/admin/Custimer">루틴명1 </NavLink>
+                        <NavLink to="/admin/Routine">루틴명1 </NavLink>
                       </td>
                       <td>오전 9:00</td>
                       <td>에어컨,가습기</td>
@@ -55,7 +55,7 @@ function TableList() {
                     <tr>
                       <td>2</td>
                       <td>
-                        <NavLink to="/admin/Custimer">루틴명2 </NavLink>
+                        <NavLink to="/admin/Routine">루틴명2 </NavLink>
                       </td>
                       <td>오전 9:00</td>
                       <td>에어컨,가습기</td>
