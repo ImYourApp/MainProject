@@ -42,7 +42,8 @@ function reducer(currentState, action) {
     return {
       alertCount: 0,
       addReport: '',
-      chart1_power:'0'
+      chart3_power:'0',
+      chart3_time:'0'
 
     };
   }
@@ -50,9 +51,23 @@ function reducer(currentState, action) {
     currentState.alertCount++;
   }
 
+  if (action.type == 'chart3') {
+    currentState.chart3_power= action.chart3_power,
+    currentState.chart3_time= action.chart3_time
+  }
+
   if (action.type == 'chart1') {
-    currentState.chart1_power= action.chart1_power,
-    currentState.chart1_time= action.chart1_time
+    if(action.chart1_1power){
+      currentState.chart1_1power= action.chart1_1power,
+      currentState.chart1_1label= action.chart1_1label
+    }
+    if(action.chart1_2power){
+      currentState.chart1_2power= action.chart1_2power,
+      currentState.chart1_2label= action.chart1_2label,
+      currentState.chart1_diDay= action.chart1_diDay
+    }
+   
+    // currentState.chart1_time= action.chart1_time
   }
 
   if (action.type == 'addReport') {
