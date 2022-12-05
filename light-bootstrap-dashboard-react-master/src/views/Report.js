@@ -1,11 +1,11 @@
 import React from "react";
 import ChartistGraph from "react-chartist";
-import { useState,Component,useRef,useEffect } from "react";
-import axios from 'axios';
-import DatePicker from 'react-datepicker';
+import { useState, Component, useRef, useEffect } from "react";
+import axios from "axios";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import ControlledSwitches from './switch.js';
-import { useDispatch,useSelector } from "react-redux";
+import ControlledSwitches from "../components/Switch.js";
+import { useDispatch, useSelector } from "react-redux";
 import Chart1 from "components/chart1.js";
 import Chart2 from "components/chart2.js";
 import Chart3 from "components/chart3.js";
@@ -44,9 +44,9 @@ const Report = () => {
     greetData('wPowerChk2');
   },[])
 
-  useEffect(()=>{
+  useEffect(() => {
     AddHtml();
-  },[addList])
+  }, [addList]);
 
   useEffect(()=>{
     greetData('wPowerChk1');
@@ -75,7 +75,7 @@ const Report = () => {
       })
       .catch(()=>{console.log('살패')})
     }
-  }
+  };
 
   function greetData(type) {
 
@@ -102,32 +102,32 @@ const Report = () => {
           dispatch({type:'chart1',chart1_1power:res.data.power,chart1_1label:res.data.label});
           // setthisPower(res.data.power);
           // console.log('이번주'+thisPower);
-        }else if(type=='wPowerChk2'){
+        } else if (type == "wPowerChk2") {
           // const wPowe = res.data.power; //지난주
           // setLastPower(res.data.power);
           dispatch({type:'chart1',chart1_2power:res.data.power,chart1_2label:res.data.label,chart1_diDay:res.data.did});
           console.log('지난주'+res.data.power);
         }
-    })
-    .catch(()=>{console.log('살패')})
+      })
+      .catch(() => {
+        console.log("살패");
+      });
   }
 
-
-  const AddHtml=() =>{
+  const AddHtml = () => {
     // console.log('addHtml'+addList);
-    const arrtext = addList.substr(1).split(',');
-    let html = ''
-    for(let i =0; i < arrtext.length;i++){
-      html+=arrtext[i];
+    const arrtext = addList.substr(1).split(",");
+    let html = "";
+    for (let i = 0; i < arrtext.length; i++) {
+      html += arrtext[i];
       // console.log('html'+html);
     }
-    return(
+    return (
       <>
-        <tbody dangerouslySetInnerHTML={{ __html: html }} ></tbody>
+        <tbody dangerouslySetInnerHTML={{ __html: html }}></tbody>
       </>
     );
-  }
-
+  };
 
   const DatePickerComponent = () => {
     let refStartd = useRef();
@@ -161,7 +161,7 @@ const Report = () => {
       })
       .catch(()=>{console.log('살패')})
     }
-  
+
     return (
       <>
           <DatePicker
@@ -199,7 +199,7 @@ const Report = () => {
       </>
     );
   };
-  console.log('111111');
+  console.log("111111");
   return (
     <>
       <Container fluid>
@@ -209,7 +209,7 @@ const Report = () => {
               <Card.Header>
                 <Card.Title as="h4">총 사용전력량</Card.Title>
                 <p className="card-category">24 Hours performance</p>
-                <DatePickerComponent/>
+                <DatePickerComponent />
               </Card.Header>
               <Card.Body>
                 <Chart3/>
@@ -407,7 +407,7 @@ const Report = () => {
               <Card.Body>
                 <div className="table-full-width">
                   <Table>
-                      <AddHtml/>
+                    <AddHtml />
                   </Table>
                 </div>
               </Card.Body>
@@ -424,6 +424,6 @@ const Report = () => {
       </Container>
     </>
   );
-}
+};
 
 export default Report;

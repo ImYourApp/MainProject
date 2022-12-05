@@ -1,8 +1,8 @@
 import React from "react";
 import ChartistGraph from "react-chartist";
-import { useState,Component,useRef,useEffect } from "react";
-import axios from 'axios';
-import DatePicker from 'react-datepicker';
+import { useState, Component, useRef, useEffect } from "react";
+import axios from "axios";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ControlledSwitches from './switch.js';
 import { useDispatch,useSelector } from "react-redux";
@@ -10,6 +10,7 @@ import Chart1 from "components/chart1.js";
 import Chart2 from "components/chart2.js";
 import Chart3 from "components/chart3.js";
 import Chart4 from "components/chart4.js";
+
 // react-bootstrap components
 import {
   Badge,
@@ -32,6 +33,7 @@ import {
 } from "react-bootstrap";
 import { notInitialized } from "react-redux/es/utils/useSyncExternalStore.js";
 import { forEachChild } from "typescript";
+
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 const Dashboard = () => {
   const addList = useSelector((state)=>(state.addReport));
@@ -43,15 +45,16 @@ const Dashboard = () => {
   const [startDate, setStartDate] = useState(new Date('2016-02-01'));
   const [endDate, setEndDate] = useState(new Date('2016-02-01'));
   useEffect(()=>{
-    loadPower();
-    greetData('wPower');
-    greetData('mPower');
-    greetData('device');
-    greetData('wPowerChk1');
-    greetData('wPowerChk2');
-  },[])
 
-  useEffect(()=>{
+    loadPower();
+    greetData("wPower");
+    greetData("mPower");
+    greetData("device");
+    greetData("wPowerChk1");
+    greetData("wPowerChk2");
+  }, []);
+
+  useEffect(() => {
     AddHtml();
   },[addList])
 
@@ -76,7 +79,7 @@ const Dashboard = () => {
       })
       .catch(()=>{console.log('살패')})
     }
-  }
+  };
 
   function greetData(type) {
 
@@ -97,22 +100,22 @@ const Dashboard = () => {
         
         console.log('성공');
 
-        if(type=='mPower'){
+        if (type == "mPower") {
           setmPower(res.data.power);
           console.log(mpower);
-        }else if(type=='wPower'){
+        } else if (type == "wPower") {
           setwPower(res.data.power);
           console.log(wpower);
-        }else if(type=='device'){
+        } else if (type == "device") {
           setDeviceCnt(res.data.device);
           console.log(deviceCnt);
-        }else if(type=='wPowerChk1'){
+        } else if (type == "wPowerChk1") {
           //이번주
           console.log('이번주'+res.data.power);
           dispatch({type:'chart1',chart1_1power:res.data.power,chart1_1label:res.data.label});
           // setthisPower(res.data.power);
           // console.log('이번주'+thisPower);
-        }else if(type=='wPowerChk2'){
+        } else if (type == "wPowerChk2") {
           // const wPowe = res.data.power; //지난주
           // setLastPower(res.data.power);
           dispatch({type:'chart1',chart1_2power:res.data.power,chart1_2label:res.data.label,chart1_diDay:res.data.did});
@@ -127,19 +130,18 @@ const Dashboard = () => {
 
   const AddHtml=() =>{
     // console.log('addHtml'+addList);
-    const arrtext = addList.substr(1).split(',');
-    let html = ''
-    for(let i =0; i < arrtext.length;i++){
-      html+=arrtext[i];
+    const arrtext = addList.substr(1).split(",");
+    let html = "";
+    for (let i = 0; i < arrtext.length; i++) {
+      html += arrtext[i];
       // console.log('html'+html);
     }
-    return(
+    return (
       <>
-        <tbody dangerouslySetInnerHTML={{ __html: html }} ></tbody>
+        <tbody dangerouslySetInnerHTML={{ __html: html }}></tbody>
       </>
     );
-  }
-
+  };
 
   const DatePickerComponent = () => {
     let refStartd = useRef();
@@ -160,7 +162,7 @@ const Dashboard = () => {
       })
       .catch(()=>{console.log('살패')})
     }
-  
+
     return (
       <>
           <DatePicker
@@ -222,9 +224,12 @@ const Dashboard = () => {
               <Card.Footer>
                 <hr></hr>
                 <div className="stats">
-                  <Button className="border-0 p-1" onClick={() => greetData("mPower")}>
-                  <i className="fas fa-redo mr-1"></i>
-                  Update Now
+                  <Button
+                    className="border-0 p-1"
+                    onClick={() => greetData("mPower")}
+                  >
+                    <i className="fas fa-redo mr-1"></i>
+                    Update Now
                   </Button>
                 </div>
               </Card.Footer>
@@ -250,7 +255,10 @@ const Dashboard = () => {
               <Card.Footer>
                 <hr></hr>
                 <div className="stats">
-                  <Button className="border-0 p-1" onClick={() => greetData("wPower")}>
+                  <Button
+                    className="border-0 p-1"
+                    onClick={() => greetData("wPower")}
+                  >
                     <i className="fas fa-redo mr-1"></i>
                     Update Now
                   </Button>
@@ -321,7 +329,7 @@ const Dashboard = () => {
               <Card.Header>
                 <Card.Title as="h4">총 전력사용량</Card.Title>
                 <p className="card-category">24 Hours performance</p>
-                <DatePickerComponent/>
+                <DatePickerComponent />
               </Card.Header>
               <Card.Body>
                 <Chart3/>
@@ -446,7 +454,7 @@ const Dashboard = () => {
               <Card.Body>
                 <div className="table-full-width">
                   <Table>
-                      <AddHtml/>
+                    <AddHtml />
                   </Table>
                 </div>
               </Card.Body>
@@ -463,6 +471,6 @@ const Dashboard = () => {
       </Container>
     </>
   );
-}
+};
 
 export default Dashboard;
