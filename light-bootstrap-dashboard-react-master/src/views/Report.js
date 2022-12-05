@@ -33,32 +33,25 @@ import {
 
 const Report = () => {
   const addList = useSelector((state)=>(state.addReport));
-  const reChart1Power = useSelector((state)=>(state.chart1_power));
-  const reChart1Time = useSelector((state)=>(state.chart1_time));
-  const [action,setAction] = useState('on');
-  const [time,setTime] = useState(["00시","02시","04시","06시","08시","10시","12시","14시","16시","18시","20시","22시","23시"]);
+  const dispatch = useDispatch();
   const [power,setPower] = useState([]);
-  const [mpower,setmPower] = useState('0');
-  const [wpower,setwPower] = useState('0');
-  const [deviceCnt,setDeviceCnt] = useState('0');
-  const [Maxpower,setMaxPower] = useState([5]);
-  const [weekend,setWeekend] = useState(['일','월','화','수','목','금','토']);
-  const [lastPower,setLastPower] = useState([]);
-  const [thisPower,setthisPower] = useState([]);
-  const [startDate, setStartDate] = useState(new Date('2016-01-01'));
-  const [endDate, setEndDate] = useState(new Date('2016-01-01'));
+  const [startDate, setStartDate] = useState(new Date('2016-02-01'));
+  const [endDate, setEndDate] = useState(new Date('2016-02-01'));
+  const [diDay, setDiDay] = useState(0);
   useEffect(()=>{
-    // loadPower();
-    // greetData('wPower');
-    // greetData('mPower');
-    // greetData('device');
-    // greetData('wPowerChk1');
-    // greetData('wPowerChk2');
+    loadPower();
+    greetData('wPowerChk1');
+    greetData('wPowerChk2');
   },[])
 
   useEffect(()=>{
     AddHtml();
   },[addList])
+
+  useEffect(()=>{
+    greetData('wPowerChk1');
+    greetData('wPowerChk2');
+  },[endDate])
 
   const loadPower = ()=>{
 
@@ -71,12 +64,13 @@ const Report = () => {
       .then((res)=>{
           
           console.log('성공');
-          setTime(res.data.time);
-          setPower(res.data.power);
-          setMaxPower(res.data.maxVal);
-          console.log(time);
-          console.log(power);
-          console.log(Maxpower);
+          dispatch({type:'chart3',chart3_power:res.data.power,chart3_time:res.data.time});
+          // setTime(res.data.time);
+          // setPower(res.data.power);
+          // setMaxPower(res.data.maxVal);
+          // console.log(time);
+          // console.log(power);
+          // console.log(Maxpower);
         
       })
       .catch(()=>{console.log('살패')})
@@ -84,30 +78,34 @@ const Report = () => {
   }
 
   function greetData(type) {
+
+    let d1 = new Date(endDate);
+    let d2 = new Date(startDate);
+
+    console.log((d1.getDate() - d2.getDate())  +'빼기날자');
+    let DateData ={
+      start : startDate,
+      end : endDate,
+      diDay : d1.getDate() - d2.getDate()
+    }
     axios.post('http://127.0.0.1:3001/total',{
-      type:type
+      type:type,
+      date:DateData
     })
     .then((res)=>{
         
         console.log('성공');
 
-        if(type=='mPower'){
-          setmPower(res.data.power);
-          console.log(mpower);
-        }else if(type=='wPower'){
-          setwPower(res.data.power);
-          console.log(wpower);
-        }else if(type=='device'){
-          setDeviceCnt(res.data.device);
-          console.log(deviceCnt);
-        }else if(type=='wPowerChk1'){
+        if(type=='wPowerChk1'){
           //이번주
           console.log('이번주'+res.data.power);
-          setthisPower(res.data.power);
+          dispatch({type:'chart1',chart1_1power:res.data.power,chart1_1label:res.data.label});
+          // setthisPower(res.data.power);
           // console.log('이번주'+thisPower);
         }else if(type=='wPowerChk2'){
           // const wPowe = res.data.power; //지난주
-          setLastPower(res.data.power);
+          // setLastPower(res.data.power);
+          dispatch({type:'chart1',chart1_2power:res.data.power,chart1_2label:res.data.label,chart1_diDay:res.data.did});
           console.log('지난주'+res.data.power);
         }
     })
@@ -132,15 +130,14 @@ const Report = () => {
 
 
   const DatePickerComponent = () => {
-    const dispatch = useDispatch();
     let refStartd = useRef();
     let refEndd = useRef();
     let DateData ={
       start : startDate,
       end : endDate
     }
+
     function dateAxios(){
-      console.log(DateData.start);
       axios.post('http://127.0.0.1:3001/db',{
         date:DateData,
         type:'power'
@@ -150,16 +147,16 @@ const Report = () => {
           // let dt = new Date(endDate);
           // dt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
           
-          setTime(res.data.time);
-          setPower(res.data.power);
-          setMaxPower(res.data.maxVal);
-          console.log('리덕스파워'+reChart1Power)
-          dispatch({type:'chart1',chart1_power:'23233'});
-          console.log(time);
-          console.log(power);
-          console.log(Maxpower);
+          // setTime(res.data.time);
+          // setPower(res.data.power);
+          // setMaxPower(res.data.maxVal);
+          // console.log('리덕스파워'+reChart1Power)
+          dispatch({type:'chart3',chart3_power:res.data.power,chart3_time:res.data.time});
+          // console.log(time);
+          // console.log(power);
+          // console.log(Maxpower);
 
-          console.log('리덕스파워'+reChart1Power)
+          // console.log('리덕스파워'+reChart1Power)
         
       })
       .catch(()=>{console.log('살패')})
@@ -302,7 +299,7 @@ const Report = () => {
           <Col md="6">
             <Card className="card-tasks">
               <Card.Header>
-                <Card.Title as="h4">총 사용전력량 주요 리포트</Card.Title>
+                <Card.Title as="h4">디바이스 전력사용 통계 주요 리포트</Card.Title>
                 <p className="card-category">Backend development</p>
               </Card.Header>
               <Card.Body>
