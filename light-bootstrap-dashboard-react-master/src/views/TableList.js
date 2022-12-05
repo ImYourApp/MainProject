@@ -1,5 +1,5 @@
 import React from "react";
-import ControlledSwitches from './switch.js';
+import ControlledSwitches from "../components/Switch.js";
 // react-bootstrap components
 import {
   Badge,
@@ -41,23 +41,29 @@ function TableList() {
                   </thead>
                   <tbody>
                     <tr>
-                        <td>1</td>
-                        <td><NavLink to="/admin/Custimer">루틴명1 </NavLink></td>
-                        <td>오전 9:00</td>
-                        <td>에어컨,가습기</td>
-                        <td>오후 7:00</td>
-                        <td><ControlledSwitches/></td>
-                
-
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td><NavLink to="/admin/Custimer">루틴명2 </NavLink></td>
+                      <td>1</td>
+                      <td>
+                        <NavLink to="/admin/Routine">루틴명1 </NavLink>
+                      </td>
                       <td>오전 9:00</td>
                       <td>에어컨,가습기</td>
                       <td>오후 7:00</td>
-                      <td><ControlledSwitches/></td>
-                    </tr>                   
+                      <td>
+                        <ControlledSwitches />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>
+                        <NavLink to="/admin/Routine">루틴명2 </NavLink>
+                      </td>
+                      <td>오전 9:00</td>
+                      <td>에어컨,가습기</td>
+                      <td>오후 7:00</td>
+                      <td>
+                        <ControlledSwitches />
+                      </td>
+                    </tr>
                   </tbody>
                 </Table>
               </Card.Body>

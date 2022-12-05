@@ -10,8 +10,8 @@ import {
   Legend,
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
-
-
+import { useDispatch,useSelector } from "react-redux";
+import { useState,Component,useRef,useEffect } from "react";
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -23,7 +23,9 @@ ChartJS.register(
 );
 
 export default function Chart3(){
-    const labels = ["00시","02시","04시","06시","08시","10시","12시","14시","16시","18시","20시","22시","23시"];
+    const reChart3Power = useSelector((state)=>(state.chart3_power));
+    const reChart3Time = useSelector((state)=>(state.chart3_time));
+    const labels = reChart3Time;
     const options = {
         responsive: true,
         plugins: {
@@ -43,15 +45,7 @@ export default function Chart3(){
         datasets: [
           {
             label: '총 전력량',
-            data: [
-                3289.271949276328,
-                1500.6860181167722,
-                1597.9688672648626,
-               1267.2627006778494,
-                 1388.4441493228078,
-                 1584.8522331416607,
-                1303.7078996002674
-               ],
+            data:reChart3Power,
             borderColor: 'rgb(255, 99, 132)',
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
           },

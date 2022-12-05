@@ -48,39 +48,112 @@ router.post('/total',(req,res)=>{
             }
         })
     }else if(parm =='wPowerChk1'){
+        const strdate = req.body.date.start;
+        const enddate = req.body.date.end;
+        arrdateStr = String(strdate).split('T');
+        arrdateEnd = String(enddate).split('T');
+        const weekend = ['일','월','화','수','목','금','토'];
+        const label = [];
+        let deDay =  req.body.date.diDay;
+        let Dformat = 'd';
 
+        if(deDay == 7){
+            Dformat = 'w';
+        }
+
+        if(deDay >= 28){
+            Dformat = 'm';
+        }
         //이번주 전력
-        const sql = " SELECT DATE_FORMAT(REG_DATE,'%w') as m, sum(POWER_USE) as p FROM POWERS where REG_DATE between '2016-01-03' and '2016-01-10 23:59'  GROUP BY m;";
+        //const sql = " SELECT DATE_FORMAT(REG_DATE,'%w') as m, sum(POWER_USE) as p FROM POWERS where REG_DATE between '2016-01-03' and '2016-01-10 23:59'  GROUP BY m;";
+
+        const sql = " SELECT DATE_FORMAT(REG_DATE,'%"+Dformat+"') as m, sum(POWER_USE) as p FROM POWERS where REG_DATE between '"+arrdateStr[0]+"' and '"+arrdateEnd[0]+" 23:59'  GROUP BY m;";
+        console.log('이번주전력'+sql);
         conn.query(sql,[],(err,rows)=>{
             if(rows.length > 0){
                 let list = [];
                 for(let i =0; i<rows.length;i++){
                     list.push(rows[i].p);
+                    if(Dformat == 'w'){
+                        label.push(weekend[rows[i].m]);
+                    }else if(Dformat =='m'){
+                        label.push(rows[i].m+'월달');
+                    }else{
+                        label.push(rows[i].m+'일');
+                    }
                 }
                 console.log(list);
                 res.json({
                     result:'success',
-                    power:list
+                    power:list,
+                    label:label
                 });  
-                
-
+            }else{
+                res.json({
+                    result:'success',
+                    power:''
+                });   
             }
         })
 
     }else if(parm =='wPowerChk2'){
+        const strdate = req.body.date.start;
+        const enddate = req.body.date.end;
+        let deDay =  req.body.date.diDay;
+        const weekend = ['일','월','화','수','목','금','토'];
+        const label = [];
+        let Dformat = 'd';
+
+        arrdateStr = String(strdate).split('T');
+        arrdateEnd = String(enddate).split('T');
+        // console.log(new Date(arrdateStr).getMonth()-1+'다라라랄');
+        if(deDay == 0){
+            deDay = 1;
+        }
+        if(deDay == 7){
+            Dformat = 'w';
+        }
+
+        if(deDay >= 28){
+            Dformat = 'y';
+        }
+
         //저번주 전력
-        const sql2 = " SELECT DATE_FORMAT(REG_DATE,'%w') as m, sum(POWER_USE) as p FROM POWERS where REG_DATE between '2016-01-11' and '2016-01-17 23:59'  GROUP BY m;";  
-        conn.query(sql2,[],(err,rows)=>{
-           
+       // const sql2 = " SELECT DATE_FORMAT(REG_DATE,'%w') as m, sum(POWER_USE) as p FROM POWERS where REG_DATE between '2016-01-10' and '2016-01-17 23:59'  GROUP BY m;";  
+       const sql2 = " SELECT DATE_FORMAT(REG_DATE,'%"+Dformat+"') as m, sum(POWER_USE) as p FROM POWERS where REG_DATE between  date_add('"+arrdateStr[0]+"',INTERVAL -"+deDay+" DAY) and  date_add('"+arrdateEnd[0]+" 23:59',INTERVAL -"+deDay+"  DAY)  GROUP BY m;";
+        console.log(sql2+'저번주전력');
+       conn.query(sql2,[],(err,rows)=>{
+
             if(rows.length > 0){
                 const list = [];
+                let did = 0;
                 for(let i =0; i<rows.length;i++){
                     list.push(rows[i].p);
+                    if(Dformat == 'w'){
+                        label.push(weekend[rows[i].m]);
+                    }else if(Dformat =='m' || Dformat =='y' ){
+                        let Montn = new Date(arrdateStr).getMonth();
+                        label.push((("00"+Montn.toString()).slice(-2))+'월달');
+                    }else{
+                        label.push(rows[i].m+'일');
+                    }
+
+                    if(rows.length == 1){
+                        did = 1;
+                    }
+
                 }
                 res.json({
                     result:'success',
-                    power:list
+                    power:list,
+                    label:label,
+                    did:did
                 });               
+            }else{
+                res.json({
+                    result:'success',
+                    power:''
+                });   
             }
         })
     }
@@ -95,7 +168,7 @@ router.post('/db',(req,res)=>{
     console.log(parm);
     if(parm =='power'){
 
-        let datewhere ="where REG_DATE between '2016-01-02' and '2016-01-02 23:59'" ;
+        let datewhere ="where REG_DATE between '2016-02-01' and '2016-02-01 23:59'" ;
         if(req.body.date != undefined){
             console.log(req.body.date.start);
             const strdate = req.body.date.start;

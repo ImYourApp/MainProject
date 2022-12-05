@@ -23,7 +23,7 @@ import Icons from "views/Icons.js";
 import Maps from "views/Maps.js";
 import Notifications from "views/Notifications.js";
 import Upgrade from "views/Upgrade.js";
-import Custimer from "views/Custimer";
+import Routine from "views/Routine.js";
 import Report from "views/Report";
 const dashboardRoutes = [
   {
@@ -91,10 +91,10 @@ const dashboardRoutes = [
   //   layout: "/admin"
   // },
   {
-    path: "/custimer",
-    name: "Custimer",
+    path: "/routine",
+    name: "Routine",
     icon: "nc-icon nc-bell-55",
-    component: Custimer,
+    component: Routine,
     layout: "/admin"
   },
   {

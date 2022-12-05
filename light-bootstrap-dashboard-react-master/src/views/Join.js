@@ -100,7 +100,6 @@ function Join() {
               <MDBInput wrapperClass='mb-2' label='휴대폰번호' id='form5' type='hp' inputRef={refHp} name='hp' />
               <h6 Class='mb-5'>&nbsp;전화번호 뭐에요? </h6>
 
-
               <MDBBtn onClick={sendJoin} className='w-100 mb-4' size='lg'>회원가입</MDBBtn>
             </MDBCardBody>
           </MDBCard>
