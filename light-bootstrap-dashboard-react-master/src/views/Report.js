@@ -207,7 +207,7 @@ const Report = () => {
           <Col md="7">
             <Card>
               <Card.Header>
-                <Card.Title as="h4">총 사용전력량</Card.Title>
+                <Card.Title as="h4">전력 총 사용량</Card.Title>
                 <p className="card-category">24 Hours performance</p>
                 <DatePickerComponent />
               </Card.Header>
@@ -226,7 +226,7 @@ const Report = () => {
           <Col md="5">
             <Card className="card-tasks">
               <Card.Header>
-                <Card.Title as="h4">총 사용전력량 주요 리포트</Card.Title>
+                <Card.Title as="h4">전력 총 사용량 주요 리포트</Card.Title>
                 <p className="card-category">Backend development</p>
               </Card.Header>
               <Card.Body>
@@ -269,7 +269,7 @@ const Report = () => {
           <Col md="4">
               <Card>
                 <Card.Header>
-                  <Card.Title as="h4">디바이스 전력사용 통계</Card.Title>
+                  <Card.Title as="h4">디바이스별 전력 사용률</Card.Title>
                   <p className="card-category">Last Campaign Performance</p>
                 </Card.Header>
                 <Card.Body>
@@ -280,7 +280,7 @@ const Report = () => {
             <Col md="8">
               <Card>
                 <Card.Header>
-                  <Card.Title as="h4">전력량 사용 과거 비교 통계</Card.Title>
+                  <Card.Title as="h4">과거 전력 사용량 비교</Card.Title>
                   <p className="card-category">Last Campaign Performance</p>
                 </Card.Header>
                 <Card.Body className="all-icons">
@@ -299,7 +299,7 @@ const Report = () => {
           <Col md="6">
             <Card className="card-tasks">
               <Card.Header>
-                <Card.Title as="h4">디바이스 전력사용 통계 주요 리포트</Card.Title>
+                <Card.Title as="h4">디바이스별 전력사용률 주요 리포트</Card.Title>
                 <p className="card-category">Backend development</p>
               </Card.Header>
               <Card.Body>
@@ -340,7 +340,7 @@ const Report = () => {
           <Col md="6">
             <Card className="card-tasks">
               <Card.Header>
-                <Card.Title as="h4">전력량 사용 과거 비교 통계 주요 리포트</Card.Title>
+                <Card.Title as="h4">과거 전력 사용량 비교 주요 리포트</Card.Title>
                 <p className="card-category">Backend development</p>
               </Card.Header>
               <Card.Body>
@@ -383,7 +383,7 @@ const Report = () => {
           <Col md="6">
             <Card>
               <Card.Header>
-                <Card.Title as="h4">다음달 예상되는 전력사용량 </Card.Title>
+                <Card.Title as="h4">다음달 전력 사용량 예측 </Card.Title>
                 <p className="card-category">All products including Taxes</p>
               </Card.Header>
               <Card.Body>
@@ -401,7 +401,7 @@ const Report = () => {
           <Col md="6">
             <Card className="card-tasks">
               <Card.Header>
-                <Card.Title as="h4">다음달 예상되는 전력사용량 주요 리포트</Card.Title>
+                <Card.Title as="h4">다음달 전력 사용량 예측 주요 리포트</Card.Title>
                 <p className="card-category">Backend development</p>
               </Card.Header>
               <Card.Body>
