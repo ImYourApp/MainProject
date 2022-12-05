@@ -4,7 +4,7 @@ import { useState, Component, useRef, useEffect } from "react";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import ControlledSwitches from './switch.js';
+import ControlledSwitches from '../components/Switch.js';
 import { useDispatch,useSelector } from "react-redux";
 import Chart1 from "components/chart1.js";
 import Chart2 from "components/chart2.js";
