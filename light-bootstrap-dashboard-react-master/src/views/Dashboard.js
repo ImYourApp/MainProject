@@ -215,7 +215,7 @@ const Dashboard = () => {
                   </Col>
                   <Col xs="7">
                     <div className="numbers">
-                      <p className="card-category">이달 총 사용전력량</p>
+                      <p className="card-category">이달 전력 총 사용량</p>
                       <Card.Title as="h5">{mpower} kw</Card.Title>
                     </div>
                   </Col>
@@ -246,7 +246,7 @@ const Dashboard = () => {
                   </Col>
                   <Col xs="7">
                     <div className="numbers">
-                      <p className="card-category">주간 총사용전력량</p>
+                      <p className="card-category">주간 전력 총 사용량</p>
                       <Card.Title as="h5">{wpower} kw</Card.Title>
                     </div>
                   </Col>
@@ -305,7 +305,7 @@ const Dashboard = () => {
                   </Col>
                   <Col xs="7">
                     <div className="numbers">
-                      <p className="card-category">사용중인 디아비스</p>
+                      <p className="card-category">사용중인 디바이스</p>
                       <Card.Title as="h5">{deviceCnt}대 가동중</Card.Title>
                     </div>
                   </Col>
@@ -327,7 +327,7 @@ const Dashboard = () => {
           <Col md="12">
             <Card>
               <Card.Header>
-                <Card.Title as="h4">총 전력사용량</Card.Title>
+                <Card.Title as="h4">전력 총 사용량</Card.Title>
                 <p className="card-category">24 Hours performance</p>
                 <DatePickerComponent />
               </Card.Header>
@@ -348,7 +348,7 @@ const Dashboard = () => {
           <Col md="4">
               <Card>
                 <Card.Header>
-                  <Card.Title as="h4">디바이스 전력사용 통계</Card.Title>
+                  <Card.Title as="h4">디바이스별 전력사용률</Card.Title>
                   <p className="card-category">Last Campaign Performance</p>
                 </Card.Header>
                 <Card.Body>
@@ -430,7 +430,7 @@ const Dashboard = () => {
           <Col md="6">
             <Card>
               <Card.Header>
-                <Card.Title as="h4">전력량 사용 과거 비교 통계</Card.Title>
+                <Card.Title as="h4">과거 전력 사용량 비교</Card.Title>
                 <p className="card-category">All products including Taxes</p>
               </Card.Header>
               <Card.Body>

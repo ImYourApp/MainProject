@@ -5,15 +5,16 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
-export default function BasicTimePicker() {
+export default function BasicTimePicker({sTime, setStime}) {
   const [strvalue, setStrValue] = React.useState();
   const [endvalue, setEndValue] = React.useState();
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TimePicker
         value={strvalue}
-        onChange={(newValue) => {
-          setStrValue(newValue);
+        onChange={(e) => {
+          console.log(e)
+          setStime(e.target);
         }}
         id="startTime"
         renderInput={(params) => <TextField {...params} />}
