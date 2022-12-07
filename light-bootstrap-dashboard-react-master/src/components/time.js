@@ -1,33 +1,30 @@
 import * as React from "react";
-
+import { Dayjs } from "dayjs";
 import TextField from "@mui/material/TextField";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
-export default function BasicTimePicker({sTime, setStime}) {
-  const [strvalue, setStrValue] = React.useState();
-  const [endvalue, setEndValue] = React.useState();
+export default function BasicTimePicker(props) {
+  // const [value, setValue] = (React.useState < Dayjs) | (null > null);
+  const getTimer = props.getTimer;
+  const [value, setValue] = React.useState();
+
+  function onFormSubmit(e) {
+    e.preventDefault();
+    getTimer(value);
+  }
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <TimePicker
-        value={strvalue}
+        getTimer={onFormSubmit}
+        value={value}
         onChange={(e) => {
-          console.log(e)
-          setStime(e.target);
+          onFormSubmit(e.target.value);
         }}
-        id="startTime"
         renderInput={(params) => <TextField {...params} />}
       />
-      {/* <TimePicker
-        label="Basic example"
-        value={endvalue}
-        onChange={(newValue) => {
-            setEndValue(newValue);
-        }}
-        id="endTime"
-        renderInput={(params) => <TextField {...params} />}
-      /> */}
     </LocalizationProvider>
   );
 }

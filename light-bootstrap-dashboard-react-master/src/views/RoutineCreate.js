@@ -19,58 +19,101 @@ import { MdDelete } from "react-icons/md";
 // react-bootstrap components
 
 import Routine from "./Routine.js";
-import BasicTimePicker from "components/time.js";
+// import BasicTimePicker from "components/time.js";
 import SliderRange from "components/slider.js";
 import SliderTemp from "components/sliderTemp.js";
-import { useNavigate } from "react-router-dom";
-
-const navigate = useNavigate();
+import { useHistory } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import TimePicker from "react-time-picker";
+import BasicTimePicker from "../components/time.js";
 
 function RoutineCreate() {
-  // 시도해볼 form 버전 1
-  const refForm = {
-    Name: useRef(),
-    StartTime: useRef(),
-    EndTime: useRef(),
-    Temperature: useRef(),
-    Humid: useRef(),
-    Light: useRef(),
-    Co2: useRef(),
-    devices: {
-      Aircon: useRef(),
-      Heater: useRef(),
-      Humidifier: useRef(),
-      Ventilator: useRef(),
-      Illuminator: useRef(),
-      Blinder: useRef(),
-    },
+  // 버튼 클릭시 /routine 페이지로 가는 함수
+  const history = useHistory();
+  const handleClick = () => {
+    history.push("routine");
   };
 
-  // 시도해볼 form 버전 2
-  const refName = useRef();
-  const refStartTime = useRef();
-  const refEndTime = useRef();
-  const refTemperature = useRef();
-  const refHumid = useRef();
-  const refLight = useRef();
-  const refCo2 = useRef();
+  const dispatch = useDispatch();
+  // 시도해볼 form 버전 1
+  // const refForm = {
+  //   Name: useRef(),
+  //   StartTime: useRef(),
+  //   EndTime: useRef(),
+  //   Temperature: useRef(),
+  //   Humid: useRef(),
+  //   Light: useRef(),
+  //   Co2: useRef(),
+  //   Devices: {
+  //     Aircon: useRef(),
+  //     Heater: useRef(),
+  //     Humidifier: useRef(),
+  //     Ventilator: useRef(),
+  //     Illuminator: useRef(),
+  //     Blinder: useRef(),
+  //   },
+  // };
 
-  const refAircon = useRef();
-  const refHeater = useRef();
-  const refHumidifier = useRef();
-  const refVentilator = useRef();
-  const refIlluminator = useRef();
-  const refBlinder = useRef();
+  // 시도해볼 form 버전 2
+  // const refName = useRef();
+  // const refStartTime = useRef();
+  // const refEndTime = useRef();
+  // const refTemperature = useRef();
+  // const refHumid = useRef();
+  // const refLight = useRef();
+  // const refCo2 = useRef();
+
+  // const refAircon = useRef();
+  // const refHeater = useRef();
+  // const refHumidifier = useRef();
+  // const refVentilator = useRef();
+  // const refIlluminator = useRef();
+  // const refBlinder = useRef();
+
+  // form 버전 3
+  const [myroutine, setMyroutine] = useState({
+    Name: null,
+    Room: null,
+    StartTime: null,
+    EndTime: null,
+    Temperature: null,
+    Humid: null,
+    Light: null,
+    Co2: null,
+    Devices: {
+      Airconditioner: null,
+      Heater: null,
+      Humidifier: null,
+      Ventilator: null,
+      Illuminator: null,
+      Blinder: null,
+    },
+  });
+
+  function onChangeInput(e) {
+    const { name, value } = e.target;
+    setMyroutine({ ...myroutine, [name]: value });
+    console.log(name, value);
+  }
 
   function sendForm() {
-    const currentForm = refForm.current.value;
-    const formData = currentForm;
+    // const currentForm = refForm.current.value;
+    // const formData = currentForm;
 
-    axios.post("http://localhost:3001/routinecreate", formData).then((res) => {
-      console.log(res.data.result).catch((res) => {
+    axios
+      .post("http://localhost:3001/routinecreate", myroutine)
+      .then((res) => {
+        console.log(res.data.result);
+      })
+      .catch((res) => {
         console.log(res.data.result);
       });
-    });
+  }
+
+  function getTimer(val) {
+    console.log(val);
+    // 이 자리에 setMyroutine(---Time) 넣기
+    
   }
 
   // Get으로 데이터베이스에서 routine 리스트 값을 받아와야 한다.
@@ -82,8 +125,6 @@ function RoutineCreate() {
   //   // axios.post
   //   // 리렌더링 안하고 routines를 보여줄 수 있는 방법은 없나?
   // }, [routines]);
-
-  function AddRoutine() {}
 
   // //명재
   // console.log("3");
@@ -171,9 +212,10 @@ function RoutineCreate() {
                   <Form.Group controlId="routineCreate-name">
                     <Form.Label>루틴 명칭</Form.Label>
                     <Form.Control
-                      type="text"
-                      defaultValue="기본 루틴"
-                      placeholder="루틴 명칭"
+                      default="기본 이름"
+                      name="Name"
+                      defaultValue={myroutine.Name}
+                      onChange={onChangeInput}
                       // value={routine.name}
                     />
                   </Form.Group>
@@ -186,16 +228,13 @@ function RoutineCreate() {
                   <Row>
                     <Col md="4">
                       <Form.Group controlId="routineCreate-startTime">
-                        <Form.Label>루틴시작 시간</Form.Label>{" "}
+                        <Form.Label>루틴시작 시간</Form.Label>
                         {/* 화면 좁게 했을 때 이 라벨 옆에 BasicTimePicker 안 오게 css 수정해야 한다. */}
-                        <BasicTimePicker // 얘를 어떻게 Form 전달하는지 모르겠다.
-                        // id="startTime"
-                        // name="startTime"
-                        // valueAs="id"
-                        // value={routine.startTime}
+                        <BasicTimePicker onSubmit={getTimer}
+                        // name="StartTime"
+                        // defaultValue={myroutine.StartTime}
                         // onChange={(e) => {
-                        //   console.log(e.target.value);
-                        //   setField("routineCreate-startTime", e.target.value);
+                        //   onChangeInput(e.target);
                         // }}
                         />
                       </Form.Group>
@@ -204,7 +243,13 @@ function RoutineCreate() {
                       <Form.Group controlId="routineCreate-endTime">
                         <Form.Label>루틴종료 시간</Form.Label>{" "}
                         {/* 화면 좁게 했을 때 이 라벨 옆에 BasicTimePicker 안 오게 css 수정해야 한다. */}
-                        <BasicTimePicker />
+                        <BasicTimePicker onSubmit={getTimer}
+                        // name="EndTime"
+                        // defaultValue={myroutine.EndTime}
+                        // onChange={(e) => {
+                        //   onChangeInput(e.target);
+                        // }}
+                        />
                       </Form.Group>
                     </Col>
                   </Row>
@@ -212,13 +257,21 @@ function RoutineCreate() {
                     <Col md="6">
                       <Form.Group controlId="routineCreate-temperature">
                         <Form.Label>온도 루틴</Form.Label>
-                        <SliderTemp />
+                        <SliderTemp
+                          name="Temperature"
+                          defaultValue={myroutine.Temperature}
+                          onChange={onChangeInput}
+                        />
                       </Form.Group>
                     </Col>
                     <Col md="6">
                       <Form.Group controlId="routineCreate-humid">
                         <Form.Label>습도 루틴</Form.Label>
-                        <SliderRange />
+                        <SliderRange
+                          name="Humid"
+                          defaultValue={myroutine.Humid}
+                          onChange={onChangeInput}
+                        />
                       </Form.Group>
                     </Col>
                   </Row>
@@ -226,13 +279,21 @@ function RoutineCreate() {
                     <Col md="6">
                       <Form.Group controlId="routineCreate-light">
                         <Form.Label>조도 루틴</Form.Label>
-                        <SliderRange />
+                        <SliderRange
+                          name="Light"
+                          defaultValue={myroutine.Light}
+                          onChange={onChangeInput}
+                        />
                       </Form.Group>
                     </Col>
                     <Col md="6">
                       <Form.Group controlId="routineCreate-co2">
                         <Form.Label>CO2 루틴</Form.Label>
-                        <SliderRange />
+                        <SliderRange
+                          name="Co2"
+                          defaultValue={myroutine.Co2}
+                          onChange={onChangeInput}
+                        />
                       </Form.Group>
                     </Col>
                   </Row>
@@ -241,7 +302,8 @@ function RoutineCreate() {
                     // type="submit"
                     variant="primary"
                     onClick={() => {
-                      navigate("/admin/routine");
+                      handleClick();
+                      sendForm();
                     }}
                   >
                     루틴 저장
@@ -259,7 +321,11 @@ function RoutineCreate() {
                         <i className="nc-icon nc-air-baloon"></i>
                         <p>에어컨</p>
                         <Form.Group controlId="routineCreate-devices-airconditioner">
-                          <ControlledSwitches />
+                          <ControlledSwitches
+                            name="Airconditioner"
+                            defaultValue={myroutine.Devices.Airconditioner}
+                            onChange={onChangeInput}
+                          />
                         </Form.Group>
                       </div>
                     </Col>
@@ -268,7 +334,11 @@ function RoutineCreate() {
                         <i className="nc-icon nc-album-2"></i>
                         <p>히터</p>
                         <Form.Group controlId="routineCreate-devices-heater">
-                          <ControlledSwitches />
+                          <ControlledSwitches
+                            name="Heater"
+                            defaultValue={myroutine.Devices.Heater}
+                            onChange={onChangeInput}
+                          />
                         </Form.Group>
                       </div>
                     </Col>
@@ -277,7 +347,11 @@ function RoutineCreate() {
                         <i className="nc-icon nc-air-baloon"></i>
                         <p>가습기</p>
                         <Form.Group controlId="routineCreate-devices-humidifier">
-                          <ControlledSwitches />
+                          <ControlledSwitches
+                            name="Humidifier"
+                            defaultValue={myroutine.Devices.Humidifier}
+                            onChange={onChangeInput}
+                          />
                         </Form.Group>
                       </div>
                     </Col>
@@ -286,7 +360,11 @@ function RoutineCreate() {
                         <i className="nc-icon nc-album-2"></i>
                         <p>환풍기</p>
                         <Form.Group controlId="routineCreate-devices-ventilator">
-                          <ControlledSwitches />
+                          <ControlledSwitches
+                            name="Ventilator"
+                            defaultValue={myroutine.Devices.Ventilator}
+                            onChange={onChangeInput}
+                          />
                         </Form.Group>
                       </div>
                     </Col>
@@ -295,7 +373,11 @@ function RoutineCreate() {
                         <i className="nc-icon nc-air-baloon"></i>
                         <p>조명</p>
                         <Form.Group controlId="routineCreate-devices-illuminator">
-                          <ControlledSwitches />
+                          <ControlledSwitches
+                            name="Illuminator"
+                            defaultValue={myroutine.Devices.Illuminator}
+                            onChange={onChangeInput}
+                          />
                         </Form.Group>
                       </div>
                     </Col>
@@ -304,7 +386,11 @@ function RoutineCreate() {
                         <i className="nc-icon nc-album-2"></i>
                         <p>블라인드</p>
                         <Form.Group controlId="routineCreate-devices-blinder">
-                          <ControlledSwitches />
+                          <ControlledSwitches
+                            name="Blinder"
+                            defaultValue={myroutine.Devices.Blinder}
+                            onChange={onChangeInput}
+                          />
                         </Form.Group>
                       </div>
                     </Col>
@@ -392,5 +478,4 @@ function RoutineCreate() {
     </>
   );
 }
-
 export default RoutineCreate;
