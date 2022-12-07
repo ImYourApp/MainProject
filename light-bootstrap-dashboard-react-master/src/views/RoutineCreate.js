@@ -1,7 +1,7 @@
 // 예를 App.js 라고 생각하자.
 import { useState, useRef, useCallback } from "react";
 import ControlledSwitches from "../components/Switch.js";
-import Routine from "../components/Routine.js";
+import Routine from "./Routine.js";
 import { MdDelete } from "react-icons/md";
 // react-bootstrap components
 import {
