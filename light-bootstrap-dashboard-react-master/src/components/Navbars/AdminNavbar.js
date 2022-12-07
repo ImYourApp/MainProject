@@ -16,7 +16,7 @@
 
 */
 import React, { Component,useState,useRef,useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation,NavLink} from "react-router-dom";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
 import { faCloud,faBell} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -242,7 +242,7 @@ function Header() {
                 href="#pablo"
                 onClick={(e) => e.preventDefault()}
               >
-                <span className="no-icon">{id}</span>
+                <NavLink to={'/login'}><span className="no-icon">{id}</span></NavLink>
               </Nav.Link>
             </Nav.Item>
           </Nav>

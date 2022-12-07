@@ -21,6 +21,8 @@ import {
 import BasicTimePicker from "components/time.js";
 import SliderRange from "components/slider.js";
 import SliderTemp from "components/sliderTemp.js";
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function Routine() {
   // RoutineList 위한 props 설정 부분
@@ -44,6 +46,8 @@ function Routine() {
     //   },
     // },
   ]);
+  const [sTime, setStime] = useState("");
+  const [eTime, setEtime] = useState("");
   const [routine, setRoutine] = useState({});
   const [errors, setErrors] = useState({});
   const setField = (field, value) => {
@@ -64,8 +68,8 @@ function Routine() {
   const nextId = useRef(1);
 
   // 루틴 추가
-  // const onAdd = useCallback(() => {
-  //   const routineCreate = {
+  const onAdd = useCallback(() => {
+    // const routineCreate = {
   //     name: "",
   //     startTime: "",
   //     endTime: "",
@@ -80,15 +84,102 @@ function Routine() {
   //       ventilator: false,
   //       illuminator: false,
   //       blinder: false,
-  //     },
-  //   };
-  //   setRoutines(routines.concat(routineCreate));
-  // }, [routines]);
+    //   },
+    // };
+    setRoutines(routines.concat(routineCreate));
+  }, [routines]);
+
+    //명재
+    console.log('3');
+    const refRseq=useRef();
+    const refId=useRef();
+    const refDseq=useRef();
+    const refRname=useRef();
+    const refCstate=useRef();
+    const refAirc=useRef();
+    const refHeat=useRef();
+    const refIllum=useRef();
+    const refBlind=useRef();
+    const refHumid=useRef();
+    const refVenti=useRef();
+
+    // const [cseq,setCseq]=useState('');
+    // const [id,setId]=useState('');
+    // const [dseq,setDseq]=useState('');
+    // const [rname,setRname]=useState('');
+    const [airc,setAirc]=useState(false);
+    const [heat,setHeat]=useState(false);
+    const [bli,setBli]=useState(false);
+    const [hum,setHum]=useState(false);
+    const [ven,setVen]=useState(false);
+    const [ilu,setIlu]=useState(false);
+  
+    function sendRegist(e){
+      e.preventDefault();
+      console.log('2')
+      const cseq=refRseq.current.value
+      const id=refId.current.value
+      const dseq=refDseq.current.value
+      const rname=refRname.current.value
+      const cstate=refCstate.current.value
+      // console.log(rname, "rname");
+      // const rstate=refRstate.current.value
+      // const stime=refStime.current.value
+      // const etime=refEtime.current.value
+      // const temp=refAirc.current.value
+      // const hum=refHumid.current.value
+      // const light=refIllum.current.value
+      // const co2=refVenti.current.value
+      const airconditioner=setAirc(airc)
+      const heater=setHeat(heat)
+      const blind=setBli(bli)
+      const humidifier=setHum(hum)
+      const ventilator=setVen(ven)
+      const illuminator=setIlu(ilu)
+      const startTime=setStime(sTime)
+      const endTime=setEtime(eTime)
+      const userDevice={
+        cseq,id,dseq,rname,cstate,airconditioner,
+        heater,blind,humidifier,ventilator,illuminator,
+        startTime,endTime,
+      };
+      console.log('4')
+      
+      // if(refRname.current.value == ''){
+      //   alert('루틴명을 입력해주세요.')
+      // }else if(refAirc.current.value == ''){
+      //   alert('에어컨 온도를 입력하세요')
+      // }else if(refHeat.current.value == ''){
+      //   alert('가습기를 입력하세요')
+      // }else if(refVenti.current.value == ''){
+      //   alert('환풍기를 입력하세요')
+      // }else if(refIllum.current.value == ''){
+      //   alert('조명을 입력하세요.')
+      // }else if(refBlind.current.value == ''){
+      //   alert('블라인드를 입력하세요.')
+      // }else{
+        axios.post('http://localhost:3001/admin/routine', userDevice)
+          .then((res) => {
+            console.log(res.data)
+            if (res.data == "등록성공") {
+              window.location.href = '/admin/routine';
+            }
+          })
+          .catch((res) => {
+            console.log(res.data)
+            if (res.data == "등록실패") {
+              console.log(userDevice)
+  
+            }
+          })
+      }
+    // }
+   
 
   return (
     <>
       <Container id="routine-form-container" fluid>
-        <Form id="routine-create-form">
+        <Form id="routine-create-form" >
           <Row>
             <Col md="8">
               <Card>
@@ -96,15 +187,39 @@ function Routine() {
                   <Card.Title as="h4">루틴 생성</Card.Title>
                   <Form.Group controlId="routineCreate-name">
                     <Form.Label>루틴 명칭</Form.Label>
+
+                    <Form.Control
+                    placeholder="루틴 순번"
+                    type="hidden"
+                    ref={refRseq}
+                    ></Form.Control>
+                    <Form.Control
+                      placeholder="회원아이디"
+                      type="hidden"
+                      ref={refId}
+                    ></Form.Control>
+                    <Form.Control
+                      placeholder="디바이스 순번"
+                      type="hidden"
+                      ref={refDseq}
+                    ></Form.Control> 
+                    <Form.Control
+                      placeholder="루틴 상태값"
+                      type="hidden"
+                      ref={refCstate}
+                    ></Form.Control> 
+                    
                     <Form.Control
                       type="text"
                       defaultValue="기본 루틴"
                       placeholder="루틴 명칭"
                       value={routine.name}
+                      ref={refRname}
                       onChange={(e) =>
                         setField("routineCreate-name", e.target.value)
                       }
                       isInvalid={!!errors.name}
+                      
                     />
                     <Form.Control.Feedback type="invalid">
                       {errors.name}
@@ -118,38 +233,49 @@ function Routine() {
                 >
                   <Row>
                     <Col md="4">
-                      <Form.Group controlId="routineCreate-startTime">
+                      <Form.Group controlId="routineCreate-startTime" >
                         <Form.Label>루틴시작 시간</Form.Label>{" "}
                         {/* 화면 좁게 했을 때 이 라벨 옆에 BasicTimePicker 안 오게 css 수정해야 한다. */}
-                        <BasicTimePicker // 얘를 어떻게 Form 전달하는지 모르겠다.
+                        <BasicTimePicker sTime={sTime} setStime={setStime} // 얘를 어떻게 Form 전달하는지 모르겠다.
+                        // ref={refStime}
                         // id="startTime"
                         // name="startTime"
                         // valueAs="id"
-                        // value={routine.startTime}
-                        // onChange={(e) => {
-                        //   console.log(e.target.value);
-                        //   setField("routineCreate-startTime", e.target.value);
-                        // }}
+                        // value={refStime.current.value}
+                        onChange={(e) => {
+                          // console.log(e.target.value);
+                          console.log("aweraewreawr")
+                          setStime(e.target.value);
+                          let sTime=e.$H + ':'+ e.$m
+                          console.log(sTime)
+                        }}
                         />
+          
                       </Form.Group>
                     </Col>
-                    <Col className="" md="4">
-                      <Form.Group controlId="routineCreate-endTime">
+                    <Col className="et" md="4">
+                      <Form.Group controlId="routineCreate-endTime" >
                         <Form.Label>루틴종료 시간</Form.Label>{" "}
                         {/* 화면 좁게 했을 때 이 라벨 옆에 BasicTimePicker 안 오게 css 수정해야 한다. */}
-                        <BasicTimePicker />
+                        <BasicTimePicker sTime={eTime} setStime={setEtime}
+                        onChange={(e)=>{
+                          setEtime(e.target.value)
+                          let eTime=e.$H + ':'+ e.$m
+                          console.log(eTime)
+                        }}/>
+                        
                       </Form.Group>
                     </Col>
                   </Row>
                   <Row>
                     <Col md="6">
-                      <Form.Group controlId="routineCreate-temperature">
+                      <Form.Group controlId="routineCreate-temperature" ref={refAirc}>
                         <Form.Label>온도 루틴</Form.Label>
                         <SliderTemp />
                       </Form.Group>
                     </Col>
                     <Col md="6">
-                      <Form.Group controlId="routineCreate-humid">
+                      <Form.Group controlId="routineCreate-humid" ref={refHumid}>
                         <Form.Label>습도 루틴</Form.Label>
                         <SliderRange />
                       </Form.Group>
@@ -157,13 +283,13 @@ function Routine() {
                   </Row>
                   <Row>
                     <Col md="6">
-                      <Form.Group controlId="routineCreate-light">
+                      <Form.Group controlId="routineCreate-light" ref={refIllum}>
                         <Form.Label>조도 루틴</Form.Label>
                         <SliderRange />
                       </Form.Group>
                     </Col>
                     <Col md="6">
-                      <Form.Group controlId="routineCreate-co2">
+                      <Form.Group controlId="routineCreate-co2" ref={refVenti}>
                         <Form.Label>CO2 루틴</Form.Label>
                         <SliderRange />
                       </Form.Group>
@@ -171,8 +297,9 @@ function Routine() {
                   </Row>
                   <Button
                     className="btn-fill pull-right mt-4"
-                    // type="submit"
+                    type="submit"
                     variant="primary"
+                    onClick={sendRegist}
                   >
                     루틴 저장
                   </Button>
@@ -184,20 +311,20 @@ function Routine() {
               <Card className="card-user">
                 <Card.Body className="all-icons">
                   <Row>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
+                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6" >
                       <div className="device_list">
                         <i className="nc-icon nc-air-baloon"></i>
                         <p>에어컨</p>
-                        <Form.Group controlId="routineCreate-devices-airconditioner">
+                        <Form.Group controlId="routineCreate-devices-airconditioner"  onClick={()=>{setAirc(!airc)}}>
                           <ControlledSwitches />
                         </Form.Group>
                       </div>
                     </Col>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
+                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6" >
                       <div className="device_list">
                         <i className="nc-icon nc-album-2"></i>
                         <p>히터</p>
-                        <Form.Group controlId="routineCreate-devices-heater">
+                        <Form.Group controlId="routineCreate-devices-heater"  onClick={()=>{setHeat(!heat)}}>
                           <ControlledSwitches />
                         </Form.Group>
                       </div>
@@ -206,7 +333,7 @@ function Routine() {
                       <div className="device_list">
                         <i className="nc-icon nc-air-baloon"></i>
                         <p>가습기</p>
-                        <Form.Group controlId="routineCreate-devices-humidifier">
+                        <Form.Group controlId="routineCreate-devices-humidifier" onClick={()=>{setHum(!hum)}}>
                           <ControlledSwitches />
                         </Form.Group>
                       </div>
@@ -215,25 +342,25 @@ function Routine() {
                       <div className="device_list">
                         <i className="nc-icon nc-album-2"></i>
                         <p>환풍기</p>
-                        <Form.Group controlId="routineCreate-devices-ventilator">
+                        <Form.Group controlId="routineCreate-devices-ventilator" onClick={()=>{setVen(!ven)}}>
                           <ControlledSwitches />
                         </Form.Group>
                       </div>
                     </Col>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
+                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6" >
                       <div className="device_list">
                         <i className="nc-icon nc-air-baloon"></i>
                         <p>조명</p>
-                        <Form.Group controlId="routineCreate-devices-illuminator">
+                        <Form.Group controlId="routineCreate-devices-illuminator" onClick={()=>{setIlu(!ilu)}}>
                           <ControlledSwitches />
                         </Form.Group>
                       </div>
                     </Col>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
+                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6" >
                       <div className="device_list">
                         <i className="nc-icon nc-album-2"></i>
                         <p>블라인드</p>
-                        <Form.Group controlId="routineCreate-devices-blinder">
+                        <Form.Group controlId="routineCreate-devices-blinder" onClick={()=>{setBli(!bli)}}>
                           <ControlledSwitches />
                         </Form.Group>
                       </div>
@@ -246,6 +373,8 @@ function Routine() {
         </Form>
         <RoutineList />
       </Container>
+    
+
 
       {/* 이 밑은 화면설계서를 위한 임시 테이블이다. */}
 
@@ -274,7 +403,7 @@ function Routine() {
                     <tr>
                       <td>1</td>
                       <td>
-                        <NavLink to="/admin/Routine">루틴명1 </NavLink>
+                        <NavLink to="/admin/routine">루틴명1 </NavLink>
                       </td>
                       <td>오전 9:00</td>
                       <td>에어컨,가습기</td>
@@ -286,7 +415,7 @@ function Routine() {
                         <MdDelete
                           padding="1rem"
                           align-items="center"
-                          font-size="1.5rem"
+                          // font-size="1.5rem"
                           color="#fa0202"
                           cursor="pointer"
                         />
@@ -295,7 +424,7 @@ function Routine() {
                     <tr>
                       <td>2</td>
                       <td>
-                        <NavLink to="/admin/Routine">루틴명2 </NavLink>
+                        <NavLink to="/admin/routine">루틴명2 </NavLink>
                       </td>
                       <td>오전 9:00</td>
                       <td>에어컨,가습기</td>
@@ -307,7 +436,7 @@ function Routine() {
                         <MdDelete
                           padding="1rem"
                           align-items="center"
-                          font-size="1.5rem"
+                          // font-size="1.5rem"
                           color="#fa0202"
                           cursor="pointer"
                         />
