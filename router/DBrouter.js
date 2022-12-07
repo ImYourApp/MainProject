@@ -57,7 +57,7 @@ DBrouter.post("/login", (req, res) => {
 })
 
 //루틴 등록-명재
-DBrouter.post('/admin/routine', (req, res) => {
+DBrouter.post('/admin/routinecreate', (req, res) => {
     console.log('dd')
     let ROUTINE_SEQ= req.query.cseq;
     let USER_ID= req.query.id;
