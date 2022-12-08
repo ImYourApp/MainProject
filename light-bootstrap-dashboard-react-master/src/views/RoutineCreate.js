@@ -1,5 +1,5 @@
 // 예를 App.js 라고 생각하자.
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import {
   Badge,
   Button,
@@ -13,12 +13,21 @@ import {
   Col,
   Table,
 } from "react-bootstrap";
+import {
+  faTemperatureArrowDown,
+  faTemperatureArrowUp,
+  faDroplet,
+  faWind,
+  faLightbulb,
+  faPersonBooth,
+  faPlug,
+} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import ControlledSwitches from "../components/Switch.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { MdDelete } from "react-icons/md";
 // react-bootstrap components
 
-import Routine from "./Routine.js";
 // import BasicTimePicker from "components/time.js";
 import SliderRange from "components/slider.js";
 import SliderTemp from "components/sliderTemp.js";
@@ -37,6 +46,7 @@ function RoutineCreate() {
     스마트블라인드: faPersonBooth,
   };
   const [deviceData, setDeviceData] = useState([]);
+
   // 버튼 클릭시 /routine 페이지로 가는 함수
   const history = useHistory();
   const handleClick = () => {

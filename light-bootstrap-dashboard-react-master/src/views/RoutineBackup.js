@@ -12,18 +12,32 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-import React from "react";
 import axios from "axios";
 import BasicTimePicker from "components/time.js";
 import SliderRange from "components/slider.js";
 import SliderTemp from "components/sliderTemp.js";
-import { faTemperatureArrowDown, faTemperatureArrowUp, faDroplet, faWind, faLightbulb, faPersonBooth, faPlug } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTemperatureArrowDown,
+  faTemperatureArrowUp,
+  faDroplet,
+  faWind,
+  faLightbulb,
+  faPersonBooth,
+  faPlug,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect } from 'react'
+import { useEffect } from "react";
 function Routine() {
   // RoutineList 위한 props 설정 부분
   // useState 등을 이용해 저장된 루틴 목록을 띄워보려 했으나 아직 미완성이다.
-  const icon = { '에어컨': faTemperatureArrowDown, '히터': faTemperatureArrowUp, '가습기': faDroplet, '환풍기': faWind, '스마트조명': faLightbulb, '스마트블라인드': faPersonBooth }
+  const icon = {
+    에어컨: faTemperatureArrowDown,
+    히터: faTemperatureArrowUp,
+    가습기: faDroplet,
+    환풍기: faWind,
+    스마트조명: faLightbulb,
+    스마트블라인드: faPersonBooth,
+  };
 
   const [routines, setRoutines] = useState([
     // {
@@ -88,52 +102,60 @@ function Routine() {
   useEffect(() => {
     // console.log(icon['에어컨'])
     getDeviceList();
-  }, [])
+  }, []);
   function getDeviceList() {
     let deviceData = {
-      type: 'list'
-    }
-    axios.post('http://127.0.0.1:3001/device', {
-      data: deviceData
-    })
+      type: "list",
+    };
+    axios
+      .post("http://127.0.0.1:3001/device", {
+        data: deviceData,
+      })
       .then((res) => {
-        if (res.data.result == 'success') {
+        if (res.data.result == "success") {
           // setDeviceData(res.data.row);
-          listDevice(res.data.row)
-          console.log('가져오기')
+          listDevice(res.data.row);
+          console.log("가져오기");
         } else {
-          console.log('가져오기실패')
+          console.log("가져오기실패");
         }
-
-      }).catch(() => { console.log('살패') })
+      })
+      .catch(() => {
+        console.log("살패");
+      });
   }
 
   function listDevice(data) {
     let device = data.map((val, index) => {
-      let dIcon = faPlug
+      let dIcon = faPlug;
       if (icon[val.DEVICE_NAME]) {
-        dIcon = icon[val.DEVICE_NAME]
+        dIcon = icon[val.DEVICE_NAME];
       }
 
       return (
         <Col key={index} className="font-icon-list" lg="6" md="3" sm="4" xs="6">
           <div className="device_list">
-            <a href='#' onClick={() => {
-              // setShowModal(true);
-              // setDeviceUid(val.DEVICE_UID);
-              // setDeviceName(val.DEVICE_NAME);
-              // setDeviceDate(val.REG_DATE);
-              // setDeviceSeq(val.DEVICE_SEQ)
-            }} name='nc-align-left-2'>
+            <a
+              href="#"
+              onClick={() => {
+                // setShowModal(true);
+                // setDeviceUid(val.DEVICE_UID);
+                // setDeviceName(val.DEVICE_NAME);
+                // setDeviceDate(val.REG_DATE);
+                // setDeviceSeq(val.DEVICE_SEQ)
+              }}
+              name="nc-align-left-2"
+            >
               <FontAwesomeIcon icon={dIcon} />
               <p>{val.DEVICE_NAME}</p>
             </a>
-            <p align="center"><ControlledSwitches /></p>
+            <p align="center">
+              <ControlledSwitches />
+            </p>
           </div>
-        </Col>)
-    }
-
-    )
+        </Col>
+      );
+    });
     // console.log(device);
     setDeviceData(device);
   }
@@ -235,9 +257,7 @@ function Routine() {
             <Col md="4">
               <Card className="card-user">
                 <Card.Body className="all-icons">
-                  <Row>
-                    {deviceData}
-                  </Row>
+                  <Row>{deviceData}</Row>
                 </Card.Body>
               </Card>
             </Col>

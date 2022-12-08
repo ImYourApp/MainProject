@@ -1,88 +1,88 @@
 import React from "react";
 import ChartistGraph from "react-chartist";
 import { useState, Component, useRef, useEffect } from "react";
-import ApexCharts from 'apexcharts'
+// import ApexCharts from 'apexcharts'
 export default class ApexChart extends React.Component {
-    constructor(props) {
-      super(props);
+  constructor(props) {
+    super(props);
 
-      this.state = {
-      
-        series: [{
-          data: data.slice()
-        }],
-        options: {
-          chart: {
-            id: 'realtime',
-            height: 350,
-            type: 'line',
-            animations: {
-              enabled: true,
-              easing: 'linear',
-              dynamicAnimation: {
-                speed: 1000
-              }
+    this.state = {
+      series: [
+        {
+          data: data.slice(),
+        },
+      ],
+      options: {
+        chart: {
+          id: "realtime",
+          height: 350,
+          type: "line",
+          animations: {
+            enabled: true,
+            easing: "linear",
+            dynamicAnimation: {
+              speed: 1000,
             },
-            toolbar: {
-              show: false
-            },
-            zoom: {
-              enabled: false
-            }
           },
-          dataLabels: {
-            enabled: false
+          toolbar: {
+            show: false,
           },
-          stroke: {
-            curve: 'smooth'
-          },
-          title: {
-            text: 'Dynamic Updating Chart',
-            align: 'left'
-          },
-          markers: {
-            size: 0
-          },
-          xaxis: {
-            type: 'datetime',
-            range: XAXISRANGE,
-          },
-          yaxis: {
-            max: 100
-          },
-          legend: {
-            show: false
+          zoom: {
+            enabled: false,
           },
         },
-      
-      
-      };
-    }
+        dataLabels: {
+          enabled: false,
+        },
+        stroke: {
+          curve: "smooth",
+        },
+        title: {
+          text: "Dynamic Updating Chart",
+          align: "left",
+        },
+        markers: {
+          size: 0,
+        },
+        xaxis: {
+          type: "datetime",
+          range: XAXISRANGE,
+        },
+        yaxis: {
+          max: 100,
+        },
+        legend: {
+          show: false,
+        },
+      },
+    };
+  }
 
-  
-    componentDidMount() {
-      window.setInterval(() => {
-        getNewSeries(lastDate, {
-          min: 10,
-          max: 90
-        })
-        
-        ApexCharts.exec('realtime', 'updateSeries', [{
-          data: data
-        }])
-      }, 1000)
-    }
-  
+  componentDidMount() {
+    window.setInterval(() => {
+      getNewSeries(lastDate, {
+        min: 10,
+        max: 90,
+      });
 
-    render() {
-      return (
-        
+      ApexCharts.exec("realtime", "updateSeries", [
+        {
+          data: data,
+        },
+      ]);
+    }, 1000);
+  }
 
-  <div id="chart">
-<ReactApexChart options={this.state.options} series={this.state.series} type="line" height={350} />
-</div>
-
-
+  render() {
+    return (
+      <div id="chart">
+        <ReactApexChart
+          options={this.state.options}
+          series={this.state.series}
+          type="line"
+          height={350}
+        />
+      </div>
     );
   }
 }

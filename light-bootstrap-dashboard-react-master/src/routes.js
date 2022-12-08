@@ -22,7 +22,6 @@ import Device from "views/Device.js";
 import Maps from "views/Maps.js";
 import Notifications from "views/Notifications.js";
 import Upgrade from "views/Upgrade.js";
-import Routine from "views/Routine.js";
 import Report from "views/Report";
 import RoutineCreate from "views/RoutineCreate.js";
 const dashboardRoutes = [
@@ -60,7 +59,7 @@ const dashboardRoutes = [
     name: "Device",
     icon: "nc-icon nc-atom",
     component: Device,
-    layout: "/admin"
+    layout: "/admin",
   },
   {
     path: "/maps",
@@ -83,13 +82,6 @@ const dashboardRoutes = [
   //   component: Notifications,
   //   layout: "/admin"
   // },
-  {
-    path: "/routine",
-    name: "Routine",
-    icon: "nc-icon nc-bell-55",
-    component: Routine,
-    layout: "/admin",
-  },
   {
     path: "/routinecreate",
     name: "RoutineCreate",
