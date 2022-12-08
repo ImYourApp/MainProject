@@ -15,6 +15,105 @@ router.get('/',(req,res)=>{
     res.render('main',{})
 })
 
+router.post('/device',(req,res)=>{
+
+    const parm = req.body.data;
+
+    if(parm.type=='add'){
+        console.log('디바이스입력'+parm.type);
+        const sql = "insert into DEVICES (USER_ID,DEVICE_NAME,DEVICE_UID,REG_DATE,DEVICE_STATUS) values('admin',?,?,NOW(),'ON')";
+        conn.query(sql,[parm.name,parm.no],(err,row)=>{
+            if(err){
+                console.log(err)
+                res.json({
+                    result:'err'
+                });     
+            }else if (row.affectedRows > 0) {
+
+                console.log("명령에 성공한 수 : " + row.affectedRows);
+                const sql2 = 'select * from DEVICES where USER_ID="admin" ';
+                conn.query(sql2,[],(err,row)=>{
+                    if(row.length > 0){
+                        res.json({
+                            result:'success',
+                            row:row
+                        });   
+                    }
+                });
+    
+            } else if (row.affectedRows == 0) {
+    
+                console.log("입력된 값이 없습니다.")
+            }
+        })
+    }else if(parm.type=='list'){
+
+        const sql2 = 'select * from DEVICES where USER_ID="admin" ';
+        conn.query(sql2,[],(err,row)=>{
+            if(row.length > 0){
+                res.json({
+                    result:'success',
+                    row:row
+                });   
+            }
+        });
+    }else if(parm.type=='del'){
+        console.log('디바이스입력'+parm.type);
+        const sql = "delete from DEVICES where DEVICE_SEQ = ?";
+        conn.query(sql,[parm.no],(err,row)=>{
+            if(err){
+                console.log(err)
+                res.json({
+                    result:'err'
+                });     
+            }else if (row.affectedRows > 0) {
+
+                console.log("명령에 성공한 수 : " + row.affectedRows);
+                const sql2 = 'select * from DEVICES where USER_ID="admin" ';
+                conn.query(sql2,[],(err,row)=>{
+                    if(row.length > 0){
+                        res.json({
+                            result:'success',
+                            row:row
+                        });   
+                    }
+                });
+    
+            } else if (row.affectedRows == 0) {
+    
+                console.log("입력된 값이 없습니다.")
+            }
+        })
+    }else if(parm.type=='edit'){
+        console.log('디바이스입력'+parm.name);
+        const sql = `update  DEVICES set ${parm.select} =? where DEVICE_SEQ = ?`;
+        conn.query(sql,[parm.name,parm.no],(err,row)=>{
+            if(err){
+                console.log(err)
+                res.json({
+                    result:'err'
+                });     
+            }else if (row.affectedRows > 0) {
+
+                console.log("명령에 성공한 수 : " + row.affectedRows);
+                const sql2 = 'select * from DEVICES where USER_ID="admin" ';
+                conn.query(sql2,[],(err,row)=>{
+                    if(row.length > 0){
+                        res.json({
+                            result:'success',
+                            row:row
+                        });   
+                    }
+                });
+    
+            } else if (row.affectedRows == 0) {
+    
+                console.log("입력된 값이 없습니다.")
+            }
+        })
+    }
+})
+
 router.post('/total',(req,res)=>{
     const parm = req.body.type;
     if(parm =='wPower'){
@@ -148,6 +247,45 @@ router.post('/total',(req,res)=>{
                     power:list,
                     label:label,
                     did:did
+                });               
+            }else{
+                res.json({
+                    result:'success',
+                    power:''
+                });   
+            }
+        })
+    }else if(parm == 'deviceUse'){
+        const strdate = req.body.date.start;
+        const enddate = req.body.date.end;
+
+        arrdateStr = String(strdate).split('T');
+        arrdateEnd = String(enddate).split('T');
+        // console.log(new Date(arrdateStr).getMonth()-1+'다라라랄');
+    
+        const sql = "select "+
+        "concat(round(( sum(HEATER)/sum(POWER_USE) * 100 ),2),'') AS heater_p, "+
+        "concat(round(( sum(AIRCONDITIONER)/sum(POWER_USE) * 100 ),2),'') AS ac_p, "+
+        "concat(round(( sum(SMARTLIGHT)/sum(POWER_USE) * 100 ),2),'') AS sl_p, "+
+        "concat(round(( sum(VENTILATOR)/sum(POWER_USE) * 100 ),2),'') AS vl_p, "+
+        "concat(round(( sum(HUMIDIFER)/sum(POWER_USE) * 100 ),2),'') AS hd_p, "+
+        "concat(round(( sum(SMARTBLIND)/sum(POWER_USE) * 100 ),2),'') AS sb_p "+
+        " from POWERS  where REG_DATE between '"+arrdateStr[0]+"' and '"+arrdateEnd[0]+" 23:59' ";
+       // console.log(sql+'디바이스 사용률');
+        conn.query(sql,[],(err,rows)=>{
+
+            if(rows.length > 0){
+                const list = [];
+                list.push(rows[0].heater_p);
+                list.push(rows[0].ac_p);
+                list.push(rows[0].sl_p);
+                list.push(rows[0].vl_p);
+                list.push(rows[0].hd_p);
+                list.push(rows[0].sb_p);
+                console.log(list+'디바이스 사용률');
+                res.json({
+                    result:'success',
+                    power:list
                 });               
             }else{
                 res.json({

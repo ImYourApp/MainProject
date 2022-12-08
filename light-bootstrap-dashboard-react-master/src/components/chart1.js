@@ -51,7 +51,7 @@ const Chart1 = () => {
           label: label+' 데이터',
           backgroundColor: ['rgb(255, 99, 132)','rgb(75, 192, 192)'],
           data: [prePower,thisPower],
-          borderColor: ['red','blue'],
+          borderColor: ['red','rgb(75, 192, 192)'],
           borderWidth: 2,
         }
       ],

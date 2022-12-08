@@ -17,14 +17,19 @@ import {
   Col,
   Table,
 } from "react-bootstrap";
-
+import React from "react";
+import axios from "axios";
 import BasicTimePicker from "components/time.js";
 import SliderRange from "components/slider.js";
 import SliderTemp from "components/sliderTemp.js";
-
+import { faTemperatureArrowDown, faTemperatureArrowUp, faDroplet, faWind, faLightbulb, faPersonBooth, faPlug } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect } from 'react'
 function Routine() {
   // RoutineList 위한 props 설정 부분
   // useState 등을 이용해 저장된 루틴 목록을 띄워보려 했으나 아직 미완성이다.
+  const icon = { '에어컨': faTemperatureArrowDown, '히터': faTemperatureArrowUp, '가습기': faDroplet, '환풍기': faWind, '스마트조명': faLightbulb, '스마트블라인드': faPersonBooth }
+
   const [routines, setRoutines] = useState([
     // {
     //   name: "",
@@ -44,6 +49,7 @@ function Routine() {
     //   },
     // },
   ]);
+  const [deviceData, setDeviceData] = React.useState([]);
   const [routine, setRoutine] = useState({});
   const [errors, setErrors] = useState({});
   const setField = (field, value) => {
@@ -84,7 +90,58 @@ function Routine() {
   //   };
   //   setRoutines(routines.concat(routineCreate));
   // }, [routines]);
+  useEffect(() => {
+    // console.log(icon['에어컨'])
+    getDeviceList();
+  }, [])
+  function getDeviceList() {
+    let deviceData = {
+      type: 'list'
+    }
+    axios.post('http://127.0.0.1:3001/device', {
+      data: deviceData
+    })
+      .then((res) => {
+        if (res.data.result == 'success') {
+          // setDeviceData(res.data.row);
+          listDevice(res.data.row)
+          console.log('가져오기')
+        } else {
+          console.log('가져오기실패')
+        }
 
+      }).catch(() => { console.log('살패') })
+  }
+
+  function listDevice(data) {
+    let device = data.map((val, index) => {
+      let dIcon = faPlug
+      if (icon[val.DEVICE_NAME]) {
+        dIcon = icon[val.DEVICE_NAME]
+      }
+
+      return (
+        <Col key={index} className="font-icon-list" lg="6" md="3" sm="4" xs="6">
+          <div className="device_list">
+            <a href='#' onClick={() => {
+              // setShowModal(true);
+              // setDeviceUid(val.DEVICE_UID);
+              // setDeviceName(val.DEVICE_NAME);
+              // setDeviceDate(val.REG_DATE);
+              // setDeviceSeq(val.DEVICE_SEQ)
+            }} name='nc-align-left-2'>
+              <FontAwesomeIcon icon={dIcon} />
+              <p>{val.DEVICE_NAME}</p>
+            </a>
+            <p align="center"><ControlledSwitches /></p>
+          </div>
+        </Col>)
+    }
+
+    )
+    // console.log(device);
+    setDeviceData(device);
+  }
   return (
     <>
       <Container id="routine-form-container" fluid>
@@ -184,60 +241,7 @@ function Routine() {
               <Card className="card-user">
                 <Card.Body className="all-icons">
                   <Row>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-air-baloon"></i>
-                        <p>에어컨</p>
-                        <Form.Group controlId="routineCreate-devices-airconditioner">
-                          <ControlledSwitches />
-                        </Form.Group>
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-album-2"></i>
-                        <p>히터</p>
-                        <Form.Group controlId="routineCreate-devices-heater">
-                          <ControlledSwitches />
-                        </Form.Group>
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-air-baloon"></i>
-                        <p>가습기</p>
-                        <Form.Group controlId="routineCreate-devices-humidifier">
-                          <ControlledSwitches />
-                        </Form.Group>
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-album-2"></i>
-                        <p>환풍기</p>
-                        <Form.Group controlId="routineCreate-devices-ventilator">
-                          <ControlledSwitches />
-                        </Form.Group>
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-air-baloon"></i>
-                        <p>조명</p>
-                        <Form.Group controlId="routineCreate-devices-illuminator">
-                          <ControlledSwitches />
-                        </Form.Group>
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="6" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-album-2"></i>
-                        <p>블라인드</p>
-                        <Form.Group controlId="routineCreate-devices-blinder">
-                          <ControlledSwitches />
-                        </Form.Group>
-                      </div>
-                    </Col>
+                    {deviceData}
                   </Row>
                 </Card.Body>
               </Card>

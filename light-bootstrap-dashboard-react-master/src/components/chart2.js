@@ -1,16 +1,17 @@
 import React from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
-
+import { useDispatch,useSelector } from "react-redux";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 export default function Chart2() {
+  const devicePower = useSelector((state)=>(state.chart2_power));
     const data = {
-        labels: ['스마트조명', '에어컨', '히터', '공기청정기', '가습기', '스마트블라인드'],
+        labels: ['히터', '에어컨', '스마트조명', '환풍기', '가습기', '스마트블라인드'],
         datasets: [
           {
             label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
+            data: devicePower,
             backgroundColor: [
               'rgba(255, 99, 132, 0.2)',
               'rgba(54, 162, 235, 0.2)',
