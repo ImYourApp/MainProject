@@ -56,4 +56,33 @@ DBrouter.post("/login", (req, res) => {
     })
 })
 
+//루틴 등록-명재
+DBrouter.post('/admin/routinecreate', (req, res) => {
+    console.log('dd')
+    let ROUTINE_SEQ= req.query.cseq;
+    let USER_ID= req.query.id;
+    let DEVICE_SEQ=req.query.dseq;
+    let ROUTINE_NAME=req.query.cname;
+    let ROUTINE_STATUS=req.query.cstate;
+    let STARTTIME=req.query.startTime;
+    let ENDTIME=req.query.endTime;
+    let AIRCONDITIONER=req.query.airconditioner;
+    let HEATER=req.query.heater;
+    let SMARTLIGHT=req.query.illuminator;
+    let SMARTBLIND=req.query.blinder;
+    let HUMIDIFER=req.query.humidifier;
+    let VENTILATOR=req.query.ventilator;
+
+    let sql= "insert into ROUTINES (ROUTINE_SEQ, USER_ID, DEVICE_SEQ, ROUTINE_NAME, ROUTINE_STATUS, AIRCONDITIONER, HEATER, SMARTLIGHT, SMARTBLIND, HUMIDIFER, VENTILATOR, STARTTIME, ENDTIME) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+    conn.query(sql, [ROUTINE_SEQ, USER_ID, DEVICE_SEQ, ROUTINE_NAME, ROUTINE_STATUS, AIRCONDITIONER, HEATER, SMARTLIGHT, SMARTBLIND, HUMIDIFER, VENTILATOR, STARTTIME, ENDTIME], (err, row)=>{
+        if(!err){
+            console.log("입력성공 : " + row);
+            res.send("루틴등록성공")
+        } else {
+            res.send("등록실패")
+            console.log("등록실패 : " + err);
+        }
+    })
+});
 module.exports = DBrouter;

@@ -1,21 +1,16 @@
-// 예를 App.js 라고 생각하자.
-import { useState, useRef, useCallback } from "react";
+import React from "react";
 import ControlledSwitches from "../components/Switch.js";
-import RoutineList from "../components/RoutineList.js";
-import { MdDelete } from "react-icons/md";
 // react-bootstrap components
 import {
   Badge,
   Button,
   Card,
-  Form,
   Navbar,
   Nav,
-  NavLink,
+  Table,
   Container,
   Row,
   Col,
-  Table,
 } from "react-bootstrap";
 import React from "react";
 import axios from "axios";
@@ -252,14 +247,13 @@ function Routine() {
       </Container>
 
       {/* 이 밑은 화면설계서를 위한 임시 테이블이다. */}
-
       <Container fluid>
         <Row>
           <Col md="12">
             <Card className="strpied-tabled-with-hover">
               <Card.Header>
-                <Card.Title as="h4">루틴 수정</Card.Title>
-                <p className="card-category">루틴 이름을 클릭</p>
+                <Card.Title as="h4">루틴 목록</Card.Title>
+                <p className="card-category">수정하려면 루틴 이름을 클릭</p>
               </Card.Header>
               <Card.Body className="table-full-width table-responsive px-0">
                 <Table className="table-hover table-striped">
@@ -271,7 +265,6 @@ function Routine() {
                       <th className="border-0">동작</th>
                       <th className="border-0">종료조건</th>
                       <th className="border-0">ON/OFF</th>
-                      <th className="border-0">삭제</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -286,15 +279,6 @@ function Routine() {
                       <td>
                         <ControlledSwitches />
                       </td>
-                      <td>
-                        <MdDelete
-                          padding="1rem"
-                          align-items="center"
-                          font-size="1.5rem"
-                          color="#fa0202"
-                          cursor="pointer"
-                        />
-                      </td>
                     </tr>
                     <tr>
                       <td>2</td>
@@ -307,18 +291,20 @@ function Routine() {
                       <td>
                         <ControlledSwitches />
                       </td>
-                      <td>
-                        <MdDelete
-                          padding="1rem"
-                          align-items="center"
-                          font-size="1.5rem"
-                          color="#fa0202"
-                          cursor="pointer"
-                        />
-                      </td>
                     </tr>
                   </tbody>
                 </Table>
+                {/* 버튼 위아래로 여백이 너무 넓은데 이건 나중에 하자. */}
+                <Button
+                  className="btn-fill pull-right "
+                  // type="submit"
+                  variant="primary"
+                  style={{
+                    margin: "1rem",
+                  }}
+                >
+                  루틴 추가
+                </Button>
               </Card.Body>
             </Card>
           </Col>

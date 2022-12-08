@@ -19,6 +19,7 @@
     "bootstrap": "4.6.0",
     "chart.js": "^4.0.1",
     "chartist": "0.11.4",
+    "dayjs": "^1.11.7",
     "faker": "^6.6.6",
     "gulp": "4.0.2",
     "gulp-append-prepend": "1.0.9",
@@ -38,6 +39,7 @@
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
     "react-scripts": "5.0.1",
+    "react-time-picker": "^5.1.0",
     "reactstrap": "8.8.1",
     "redux": "^4.2.0",
     "sass": "1.53.0"
