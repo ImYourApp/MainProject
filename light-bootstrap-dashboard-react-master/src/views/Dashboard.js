@@ -9,8 +9,10 @@ import { useDispatch,useSelector } from "react-redux";
 import Chart1 from "components/chart1.js";
 import Chart2 from "components/chart2.js";
 import Chart3 from "components/chart3.js";
-import Chart4 from "components/chart4.js";
-
+import ToggleButtonExample from 'components/toggle.js'
+import ApexChart from "components/ApexChart";
+import { faSmog,faTemperature0,faDroplet} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // react-bootstrap components
 import {
   Badge,
@@ -52,6 +54,7 @@ const Dashboard = () => {
     greetData("device");
     greetData("wPowerChk1");
     greetData("wPowerChk2");
+    greetData('deviceUse');
   }, []);
 
   useEffect(() => {
@@ -61,6 +64,7 @@ const Dashboard = () => {
   useEffect(()=>{
     greetData('wPowerChk1');
     greetData('wPowerChk2');
+    greetData('deviceUse');
   },[endDate])
 
   const loadPower = ()=>{
@@ -120,7 +124,10 @@ const Dashboard = () => {
           // setLastPower(res.data.power);
           dispatch({type:'chart1',chart1_2power:res.data.power,chart1_2label:res.data.label,chart1_diDay:res.data.did});
           console.log('지난주'+res.data.power);
-        }
+        }else if (type == "deviceUse") {
+          dispatch({type:'chart2',chart2_power:res.data.power});
+         // console.log('디바이스 사용률'+res.data.power);
+       }
         
     })
     .catch(()=>{console.log('살패')})
@@ -324,7 +331,7 @@ const Dashboard = () => {
           </Col>
         </Row>
         <Row>
-          <Col md="12">
+          <Col md="6">
             <Card>
               <Card.Header>
                 <Card.Title as="h4">전력 총 사용량</Card.Title>
@@ -343,6 +350,98 @@ const Dashboard = () => {
               </Card.Footer>
             </Card>
           </Col>
+          <Col md="6">
+              <Card>
+                <Card.Header>
+                  <Card.Title as="h4">Room 실시간 정보</Card.Title>
+                  <p className="card-category">Last Campaign Performance</p>
+                </Card.Header>
+                <Card.Body className="all-icons" style={{paddingTop:0}}>
+                  <Row>
+                    <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                      <div className="room_list ">
+                        <h5>사장실 루틴<span  className="rbtn"><ControlledSwitches /></span></h5>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faSmog} />
+                          <p>441</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faTemperature0} />
+                          <p>26 ℃</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faDroplet} />
+                          <p>26 %</p>
+                        </Col>
+                      </div>
+                    </Col>
+                    <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                      <div className="room_list ">
+                        <h5>사무실 루틴<span  className="rbtn"><ControlledSwitches /></span></h5>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faSmog} />
+                          <p>342</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faTemperature0} />
+                          <p>24 ℃</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faDroplet} />
+                          <p>13 %</p>
+                        </Col>
+                        <p>
+                          {/* 루틴3 ON */}
+                        </p>
+                      </div>
+                    </Col>
+                    <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                      <div className="room_list ">
+                        <h5>휴게실 루틴<span className="rbtn"><ControlledSwitches /></span></h5>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faSmog} />
+                          <p>380</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faTemperature0} />
+                          <p>25 ℃</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faDroplet} />
+                          <p>16 %</p>
+                        </Col>
+                        <p>
+                          {/* 루틴3 ON */}
+                        </p>
+                      </div>
+                    </Col>
+                    <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                      <div className="room_list ">
+                        <h5>회의실 루틴<span  className="rbtn"><ControlledSwitches /></span></h5>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faSmog} />
+                          <p>234</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faTemperature0} />
+                          <p>28 ℃</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faDroplet} />
+                          <p>22 %</p>
+                        </Col>
+                        {/* <ToggleButtonExample/> */}
+                        <p>
+                          {/* 루틴3 ON */}
+                        </p>
+                      </div>
+                    </Col>
+ 
+                  </Row>
+
+                </Card.Body>
+              </Card>
+            </Col>
         </Row>
         <Row>
           <Col md="4">
