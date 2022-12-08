@@ -42,6 +42,7 @@ const Report = () => {
     loadPower();
     greetData('wPowerChk1');
     greetData('wPowerChk2');
+    greetData('deviceUse');
   },[])
 
   useEffect(() => {
@@ -51,6 +52,7 @@ const Report = () => {
   useEffect(()=>{
     greetData('wPowerChk1');
     greetData('wPowerChk2');
+    greetData('deviceUse');
   },[endDate])
 
   const loadPower = ()=>{
@@ -103,10 +105,11 @@ const Report = () => {
           // setthisPower(res.data.power);
           // console.log('이번주'+thisPower);
         } else if (type == "wPowerChk2") {
-          // const wPowe = res.data.power; //지난주
-          // setLastPower(res.data.power);
           dispatch({type:'chart1',chart1_2power:res.data.power,chart1_2label:res.data.label,chart1_diDay:res.data.did});
           console.log('지난주'+res.data.power);
+        } else if (type == "deviceUse") {
+           dispatch({type:'chart2',chart2_power:res.data.power});
+          // console.log('디바이스 사용률'+res.data.power);
         }
       })
       .catch(() => {
@@ -199,7 +202,7 @@ const Report = () => {
       </>
     );
   };
-  console.log("111111");
+
   return (
     <>
       <Container fluid>

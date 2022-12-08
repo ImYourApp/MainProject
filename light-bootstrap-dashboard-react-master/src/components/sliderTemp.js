@@ -29,18 +29,19 @@ const marks = [
   },
 ];
 
-function valueLabelFormat(value) {
-  return marks.findIndex((mark) => mark.value === value) + 1;
-}
+// function valueLabelFormat(value) {
+//   return marks.findIndex((mark) => mark.value === value) + 1;
+// }
 
-export default function RangeSlider() {
-  function valuetext(value) {
-    return `${value}°C`;
-  }
+export default function RangeSlider(props) {
+  // function valuetext(value) {
+  //   return `${value}°C`;
+  // }
   const [value, setValue] = useState([-10, -10]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    props.getSlider(newValue);
   };
 
   return (

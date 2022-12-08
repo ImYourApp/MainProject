@@ -5,12 +5,16 @@ import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import ControlledSwitches from '../components/Switch.js';
-import { useDispatch,useSelector } from "react-redux";
+import ControlledSwitches1  from '../components/DeviceSwitch.js';
+import { useDispatch, useSelector } from "react-redux";
 import Chart1 from "components/chart1.js";
 import Chart2 from "components/chart2.js";
 import Chart3 from "components/chart3.js";
-import Chart4 from "components/chart4.js";
+import ToggleButtonExample from 'components/toggle.js'
+import ApexChart from "components/ApexChart";
+import { faSmog, faTemperature0, faTemperatureArrowDown, faTemperatureArrowUp, faDroplet, faWind, faLightbulb, faPersonBooth, faPlug  } from "@fortawesome/free-solid-svg-icons";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // react-bootstrap components
 import {
   Badge,
@@ -36,15 +40,18 @@ import { forEachChild } from "typescript";
 
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
 const Dashboard = () => {
-  const addList = useSelector((state)=>(state.addReport));
+  const addList = useSelector((state) => (state.addReport));
   const dispatch = useDispatch();
-  const [power,setPower] = useState([]);
-  const [mpower,setmPower] = useState('0');
-  const [wpower,setwPower] = useState('0');
-  const [deviceCnt,setDeviceCnt] = useState('0');
+  const [power, setPower] = useState([]);
+  const [mpower, setmPower] = useState('0');
+  const [wpower, setwPower] = useState('0');
+  const [deviceCnt, setDeviceCnt] = useState('0');
   const [startDate, setStartDate] = useState(new Date('2016-02-01'));
   const [endDate, setEndDate] = useState(new Date('2016-02-01'));
-  useEffect(()=>{
+  const icon = { '에어컨': faTemperatureArrowDown, '히터': faTemperatureArrowUp, '가습기': faDroplet, '환풍기': faWind, '스마트조명': faLightbulb, '스마트블라인드': faPersonBooth }
+  const [deviceData, setDeviceData] = useState([]);
+
+  useEffect(() => {
 
     loadPower();
     greetData("wPower");
@@ -52,32 +59,35 @@ const Dashboard = () => {
     greetData("device");
     greetData("wPowerChk1");
     greetData("wPowerChk2");
+    greetData('deviceUse');
+    getDeviceList();
   }, []);
 
   useEffect(() => {
     AddHtml();
-  },[addList])
+  }, [addList])
 
-  useEffect(()=>{
+  useEffect(() => {
     greetData('wPowerChk1');
     greetData('wPowerChk2');
-  },[endDate])
+    greetData('deviceUse');
+  }, [endDate])
 
-  const loadPower = ()=>{
+  const loadPower = () => {
 
     console.log('loadPower function')
-    if(power.length == 0){
+    if (power.length == 0) {
 
-      axios.post('http://127.0.0.1:3001/db',{
-        type:'power'
+      axios.post('http://127.0.0.1:3001/db', {
+        type: 'power'
       })
-      .then((res)=>{
-          
+        .then((res) => {
+
           console.log('성공');
-          dispatch({type:'chart3',chart3_power:res.data.power,chart3_time:res.data.time});
-        
-      })
-      .catch(()=>{console.log('살패')})
+          dispatch({ type: 'chart3', chart3_power: res.data.power, chart3_time: res.data.time });
+
+        })
+        .catch(() => { console.log('살패') })
     }
   };
 
@@ -86,18 +96,18 @@ const Dashboard = () => {
     let d1 = new Date(endDate);
     let d2 = new Date(startDate);
 
-    console.log((d1.getDate() - d2.getDate())  +'빼기날자');
-    let DateData ={
-      start : startDate,
-      end : endDate,
-      diDay : d1.getDate() - d2.getDate()
+    console.log((d1.getDate() - d2.getDate()) + '빼기날자');
+    let DateData = {
+      start: startDate,
+      end: endDate,
+      diDay: d1.getDate() - d2.getDate()
     }
-    axios.post('http://127.0.0.1:3001/total',{
-      type:type,
-      date:DateData
+    axios.post('http://127.0.0.1:3001/total', {
+      type: type,
+      date: DateData
     })
-    .then((res)=>{
-        
+      .then((res) => {
+
         console.log('성공');
 
         if (type == "mPower") {
@@ -111,24 +121,27 @@ const Dashboard = () => {
           console.log(deviceCnt);
         } else if (type == "wPowerChk1") {
           //이번주
-          console.log('이번주'+res.data.power);
-          dispatch({type:'chart1',chart1_1power:res.data.power,chart1_1label:res.data.label});
+          console.log('이번주' + res.data.power);
+          dispatch({ type: 'chart1', chart1_1power: res.data.power, chart1_1label: res.data.label });
           // setthisPower(res.data.power);
           // console.log('이번주'+thisPower);
         } else if (type == "wPowerChk2") {
           // const wPowe = res.data.power; //지난주
           // setLastPower(res.data.power);
-          dispatch({type:'chart1',chart1_2power:res.data.power,chart1_2label:res.data.label,chart1_diDay:res.data.did});
-          console.log('지난주'+res.data.power);
+          dispatch({ type: 'chart1', chart1_2power: res.data.power, chart1_2label: res.data.label, chart1_diDay: res.data.did });
+          console.log('지난주' + res.data.power);
+        } else if (type == "deviceUse") {
+          dispatch({ type: 'chart2', chart2_power: res.data.power });
+          // console.log('디바이스 사용률'+res.data.power);
         }
-        
-    })
-    .catch(()=>{console.log('살패')})
+
+      })
+      .catch(() => { console.log('살패') })
   }
 
 
 
-  const AddHtml=() =>{
+  const AddHtml = () => {
     // console.log('addHtml'+addList);
     const arrtext = addList.substr(1).split(",");
     let html = "";
@@ -146,60 +159,109 @@ const Dashboard = () => {
   const DatePickerComponent = () => {
     let refStartd = useRef();
     let refEndd = useRef();
-    let DateData ={
-      start : startDate,
-      end : endDate
+    let DateData = {
+      start: startDate,
+      end: endDate
     }
 
-    function dateAxios(){
-      axios.post('http://127.0.0.1:3001/db',{
-        date:DateData,
-        type:'power'
+    function dateAxios() {
+      axios.post('http://127.0.0.1:3001/db', {
+        date: DateData,
+        type: 'power'
       })
-      .then((res)=>{
+        .then((res) => {
           console.log('성공');
-          dispatch({type:'chart3',chart3_power:res.data.power,chart3_time:res.data.time});
-      })
-      .catch(()=>{console.log('살패')})
+          dispatch({ type: 'chart3', chart3_power: res.data.power, chart3_time: res.data.time });
+        })
+        .catch(() => { console.log('살패') })
     }
 
     return (
       <>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            selectsStart
-            startDate={startDate}
-            endDate={endDate}
-            name='strDate'
-            ref={refStartd}
-            dateFormat="yyyy-MM-dd"
-          />
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            selectsEnd
-            startDate={startDate}
-            endDate={endDate}
-            minDate={startDate}
-            name='endDate'
-            ref={refEndd}
-            dateFormat="yyyy-MM-dd"
-          />
-          <Button
-            className="btn-fill pull-right"
-            type="button"
-            variant="info"
-            style={{
-              lineHeight:1.2
-            }}
-            onClick={()=>dateAxios()}
-          >
-            조회
-          </Button>
+        <DatePicker
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
+          selectsStart
+          startDate={startDate}
+          endDate={endDate}
+          name='strDate'
+          ref={refStartd}
+          dateFormat="yyyy-MM-dd"
+        />
+        <DatePicker
+          selected={endDate}
+          onChange={(date) => setEndDate(date)}
+          selectsEnd
+          startDate={startDate}
+          endDate={endDate}
+          minDate={startDate}
+          name='endDate'
+          ref={refEndd}
+          dateFormat="yyyy-MM-dd"
+        />
+        <Button
+          className="btn-fill pull-right"
+          type="button"
+          variant="info"
+          style={{
+            lineHeight: 1.2
+          }}
+          onClick={() => dateAxios()}
+        >
+          조회
+        </Button>
       </>
     );
   };
+
+  function getDeviceList() {
+    let deviceData = {
+      type: 'list'
+    }
+    axios.post('http://127.0.0.1:3001/device', {
+      data: deviceData
+    })
+      .then((res) => {
+        if (res.data.result == 'success') {
+          // setDeviceData(res.data.row);
+          listDevice(res.data.row)
+          console.log('가져오기')
+        } else {
+          console.log('가져오기실패')
+        }
+
+      }).catch(() => { console.log('살패') })
+  }
+
+  function listDevice(data) {
+    let device = data.map((val, index) => {
+      let dIcon = faPlug
+      if (icon[val.DEVICE_NAME]) {
+        dIcon = icon[val.DEVICE_NAME]
+      }
+
+      return (
+        <Col key={index} className="font-icon-list" lg="3" md="3" sm="4" xs="6">
+          <div className="device_list">
+            <a href='#' onClick={() => {
+              // setShowModal(true);
+              // setDeviceUid(val.DEVICE_UID);
+              // setDeviceName(val.DEVICE_NAME);
+              // setDeviceDate(val.REG_DATE);
+              // setDeviceSeq(val.DEVICE_SEQ)
+            }} name='nc-align-left-2'>
+              <FontAwesomeIcon icon={dIcon} />
+              <p>{val.DEVICE_NAME}</p>
+            </a>
+            <p align="center"><ControlledSwitches1  state={val.DEVICE_STATUS} uid={val.DEVICE_SEQ}/></p>
+          </div>
+        </Col>)
+    }
+
+    )
+    // console.log(device);
+    setDeviceData(device);
+  }
   return (
     <>
       <Container fluid>
@@ -324,7 +386,7 @@ const Dashboard = () => {
           </Col>
         </Row>
         <Row>
-          <Col md="12">
+          <Col md="6">
             <Card>
               <Card.Header>
                 <Card.Title as="h4">전력 총 사용량</Card.Title>
@@ -332,7 +394,7 @@ const Dashboard = () => {
                 <DatePickerComponent />
               </Card.Header>
               <Card.Body>
-                <Chart3/>
+                <Chart3 />
               </Card.Body>
               <Card.Footer>
                 <hr></hr>
@@ -343,88 +405,125 @@ const Dashboard = () => {
               </Card.Footer>
             </Card>
           </Col>
+          <Col md="6">
+            <Card>
+              <Card.Header>
+                <Card.Title as="h4">Room 실시간 정보</Card.Title>
+                <p className="card-category">Last Campaign Performance</p>
+              </Card.Header>
+              <Card.Body className="all-icons" style={{ paddingTop: 0 }}>
+                <Row>
+                  <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                    <div className="room_list ">
+                      <h5>사장실 루틴<span className="rbtn"><ControlledSwitches /></span></h5>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faSmog} />
+                        <p>441</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faTemperature0} />
+                        <p>26 ℃</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faDroplet} />
+                        <p>26 %</p>
+                      </Col>
+                    </div>
+                  </Col>
+                  <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                    <div className="room_list ">
+                      <h5>사무실 루틴<span className="rbtn"><ControlledSwitches /></span></h5>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faSmog} />
+                        <p>342</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faTemperature0} />
+                        <p>24 ℃</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faDroplet} />
+                        <p>13 %</p>
+                      </Col>
+                      <p>
+                        {/* 루틴3 ON */}
+                      </p>
+                    </div>
+                  </Col>
+                  <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                    <div className="room_list ">
+                      <h5>휴게실 루틴<span className="rbtn"><ControlledSwitches /></span></h5>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faSmog} />
+                        <p>380</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faTemperature0} />
+                        <p>25 ℃</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faDroplet} />
+                        <p>16 %</p>
+                      </Col>
+                      <p>
+                        {/* 루틴3 ON */}
+                      </p>
+                    </div>
+                  </Col>
+                  <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                    <div className="room_list ">
+                      <h5>회의실 루틴<span className="rbtn"><ControlledSwitches /></span></h5>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faSmog} />
+                        <p>234</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faTemperature0} />
+                        <p>28 ℃</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faDroplet} />
+                        <p>22 %</p>
+                      </Col>
+                      {/* <ToggleButtonExample/> */}
+                      <p>
+                        {/* 루틴3 ON */}
+                      </p>
+                    </div>
+                  </Col>
+
+                </Row>
+
+              </Card.Body>
+            </Card>
+          </Col>
         </Row>
         <Row>
           <Col md="4">
-              <Card>
-                <Card.Header>
-                  <Card.Title as="h4">디바이스별 전력사용률</Card.Title>
-                  <p className="card-category">Last Campaign Performance</p>
-                </Card.Header>
-                <Card.Body>
-                  <Chart2/>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md="8">
-              <Card>
-                <Card.Header>
-                  <Card.Title as="h4">디바이스 관리</Card.Title>
-                  <p className="card-category">Last Campaign Performance</p>
-                </Card.Header>
-                <Card.Body className="all-icons">
-                  <Row>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-air-baloon"></i>
-                        <p>에어컨</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-album-2"></i>
-                        <p>히터</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-air-baloon"></i>
-                        <p>가습기</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-album-2"></i>
-                        <p>환풍기</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-air-baloon"></i>
-                        <p>조명</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-album-2"></i>
-                        <p>블라인드</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-air-baloon"></i>
-                        <p>블라인드2</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-album-2"></i>
-                        <p>스마트플러그</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                  </Row>
+            <Card>
+              <Card.Header>
+                <Card.Title as="h4">디바이스별 전력사용률</Card.Title>
+                <p className="card-category">Last Campaign Performance</p>
+              </Card.Header>
+              <Card.Body>
+                <Chart2 />
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md="8">
+            <Card>
+              <Card.Header>
+                <Card.Title as="h4">디바이스 관리</Card.Title>
+                <p className="card-category">Last Campaign Performance</p>
+              </Card.Header>
+              <Card.Body className="all-icons">
+                <Row>
+                  {deviceData}
+                </Row>
 
-                </Card.Body>
-              </Card>
-            </Col>
+              </Card.Body>
+            </Card>
+          </Col>
         </Row>
         <Row>
           <Col md="6">
@@ -434,7 +533,7 @@ const Dashboard = () => {
                 <p className="card-category">All products including Taxes</p>
               </Card.Header>
               <Card.Body>
-                <Chart1/>
+                <Chart1 />
               </Card.Body>
               <Card.Footer>
                 <hr></hr>

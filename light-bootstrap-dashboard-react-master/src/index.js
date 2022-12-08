@@ -69,6 +69,10 @@ function reducer(currentState, action) {
    
     // currentState.chart1_time= action.chart1_time
   }
+  if (action.type == 'chart2') {
+    currentState.chart2_power= action.chart2_power
+    console.log(currentState.chart2_power+'디바이스 백분률');
+  }
 
   if (action.type == 'addReport') {
     // if (currentState.addReport.length < 5) {

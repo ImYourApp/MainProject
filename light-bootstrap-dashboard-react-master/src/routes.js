@@ -56,11 +56,11 @@ const dashboardRoutes = [
     layout: "/admin",
   },
   {
-    path: "/icons",
-    name: "Icons",
+    path: "/device",
+    name: "Device",
     icon: "nc-icon nc-atom",
-    component: Icons,
-    layout: "/admin",
+    component: Device,
+    layout: "/admin"
   },
   {
     path: "/maps",
