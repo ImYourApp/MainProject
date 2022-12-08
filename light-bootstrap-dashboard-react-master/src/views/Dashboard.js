@@ -406,97 +406,98 @@ const Dashboard = () => {
             </Card>
           </Col>
           <Col md="6">
-            <Card>
-              <Card.Header>
-                <Card.Title as="h4">Room 실시간 정보</Card.Title>
-                <p className="card-category">Last Campaign Performance</p>
-              </Card.Header>
-              <Card.Body className="all-icons" style={{ paddingTop: 0 }}>
-                <Row>
-                  <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
-                    <div className="room_list ">
-                      <h5>사장실 루틴<span className="rbtn"><ControlledSwitches /></span></h5>
-                      <Col lg='4' className="sensing_info">
-                        <FontAwesomeIcon icon={faSmog} />
-                        <p>441</p>
-                      </Col>
-                      <Col lg='4' className="sensing_info">
-                        <FontAwesomeIcon icon={faTemperature0} />
-                        <p>26 ℃</p>
-                      </Col>
-                      <Col lg='4' className="sensing_info">
-                        <FontAwesomeIcon icon={faDroplet} />
-                        <p>26 %</p>
-                      </Col>
-                    </div>
-                  </Col>
-                  <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
-                    <div className="room_list ">
-                      <h5>사무실 루틴<span className="rbtn"><ControlledSwitches /></span></h5>
-                      <Col lg='4' className="sensing_info">
-                        <FontAwesomeIcon icon={faSmog} />
-                        <p>342</p>
-                      </Col>
-                      <Col lg='4' className="sensing_info">
-                        <FontAwesomeIcon icon={faTemperature0} />
-                        <p>24 ℃</p>
-                      </Col>
-                      <Col lg='4' className="sensing_info">
-                        <FontAwesomeIcon icon={faDroplet} />
-                        <p>13 %</p>
-                      </Col>
-                      <p>
-                        {/* 루틴3 ON */}
-                      </p>
-                    </div>
-                  </Col>
-                  <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
-                    <div className="room_list ">
-                      <h5>휴게실 루틴<span className="rbtn"><ControlledSwitches /></span></h5>
-                      <Col lg='4' className="sensing_info">
-                        <FontAwesomeIcon icon={faSmog} />
-                        <p>380</p>
-                      </Col>
-                      <Col lg='4' className="sensing_info">
-                        <FontAwesomeIcon icon={faTemperature0} />
-                        <p>25 ℃</p>
-                      </Col>
-                      <Col lg='4' className="sensing_info">
-                        <FontAwesomeIcon icon={faDroplet} />
-                        <p>16 %</p>
-                      </Col>
-                      <p>
-                        {/* 루틴3 ON */}
-                      </p>
-                    </div>
-                  </Col>
-                  <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
-                    <div className="room_list ">
-                      <h5>회의실 루틴<span className="rbtn"><ControlledSwitches /></span></h5>
-                      <Col lg='4' className="sensing_info">
-                        <FontAwesomeIcon icon={faSmog} />
-                        <p>234</p>
-                      </Col>
-                      <Col lg='4' className="sensing_info">
-                        <FontAwesomeIcon icon={faTemperature0} />
-                        <p>28 ℃</p>
-                      </Col>
-                      <Col lg='4' className="sensing_info">
-                        <FontAwesomeIcon icon={faDroplet} />
-                        <p>22 %</p>
-                      </Col>
-                      {/* <ToggleButtonExample/> */}
-                      <p>
-                        {/* 루틴3 ON */}
-                      </p>
-                    </div>
-                  </Col>
+              <Card>
+                <Card.Header>
+                  <Card.Title as="h4">Room 실시간 정보</Card.Title>
+                  <p className="card-category">Last Campaign Performance</p>
+                </Card.Header>
+                <Card.Body className="all-icons" style={{paddingTop:0}}>
+                  <Row>
+                    <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                      <div className="room_list ">
+                        <h5>사장실 루틴<span  className="rbtn"><ControlledSwitches /></span></h5>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faSmog} />
+                          <p>441</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faTemperature0} />
+                          <p>26 ℃</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faDroplet} />
+                          <p>26 %</p>
+                        </Col>
+                      </div>
+                    </Col>
+                    <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                      <div className="room_list ">
+                        <h5>사무실 루틴<span  className="rbtn"><ControlledSwitches /></span></h5>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faSmog} />
+                          <p>342</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faTemperature0} />
+                          <p>24 ℃</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faDroplet} />
+                          <p>13 %</p>
+                        </Col>
+                        <p>
+                          {/* 루틴3 ON */}
+                        </p>
+                      </div>
+                    </Col>
+                    <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                      <div className="room_list ">
+                        <h5>휴게실 루틴<span className="rbtn"><ControlledSwitches /></span></h5>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faSmog} />
+                          <p>380</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faTemperature0} />
+                          <p>25 ℃</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faDroplet} />
+                          <p>16 %</p>
+                        </Col>
+                        <p>
+                          {/* 루틴3 ON */}
+                        </p>
+                      </div>
+                    </Col>
+                    <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                      <div className="room_list ">
+                        <h5>회의실 루틴<span  className="rbtn"><ControlledSwitches /></span></h5>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faSmog} />
+                          <p>234</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faTemperature0} />
+                          <p>28 ℃</p>
+                        </Col>
+                        <Col lg='4' className="sensing_info">
+                          <FontAwesomeIcon icon={faDroplet} />
+                          <p>22 %</p>
+                        </Col>
+                        {/* <ToggleButtonExample/> */}
+                        <p>
+                          {/* 루틴3 ON */}
+                        </p>
+                      </div>
+                    </Col>
+ 
+                  </Row>
 
-                </Row>
-
-              </Card.Body>
-            </Card>
-          </Col>
+                </Card.Body>
+              </Card>
+            </Col>
+>>>>>>> 9d2558ed1363539226eca207c94fe19ab7e1b5ab
         </Row>
         <Row>
           <Col md="4">
