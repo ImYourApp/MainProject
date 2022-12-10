@@ -69,6 +69,10 @@ function reducer(currentState, action) {
    
     // currentState.chart1_time= action.chart1_time
   }
+  if (action.type == 'chart2') {
+    currentState.chart2_power= action.chart2_power
+    console.log(currentState.chart2_power+'디바이스 백분률');
+  }
 
   if (action.type == 'addReport') {
     // if (currentState.addReport.length < 5) {
@@ -78,6 +82,25 @@ function reducer(currentState, action) {
     // }
 
   }
+
+  if (action.type == 'login') {
+    console.log('리덕스 아이디'+action.loginId)
+    currentState.loginId=action.loginId
+    currentState.loginNick=action.loginNick,
+    console.log('리덕스 닉네임'+action.loginNick)
+    currentState.loginImage=action.loginImage 
+  }
+
+  if (action.type == 'editnick') {
+   
+    currentState.loginNick=action.newNick,
+
+    console.log(action.newNick)
+  }
+
+  // if(action.type =='device'){
+  //   if(action.select == '')
+  // }
   return { ...currentState };
 }
 

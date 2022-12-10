@@ -19,7 +19,7 @@ import { useDispatch,useSelector } from "react-redux";
 function Notifications() {
   console.log('alert');
     useEffect(()=>{
-      notify("tc");
+      // notify("tc");
         // setInterval(function() {
         // notify("tc");
         // }, 10000);
