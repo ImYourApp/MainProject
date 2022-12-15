@@ -15,36 +15,64 @@
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 */
-import React, { Component,useState,useRef,useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { Component, useState, useRef, useEffect } from "react";
+import { useLocation, NavLink } from "react-router-dom";
 import { Navbar, Container, Nav, Dropdown, Button } from "react-bootstrap";
-import { faCloud,faBell} from "@fortawesome/free-solid-svg-icons";
+import { faCloud, faBell } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import routes from "routes.js";
 
 function Header() {
-  useEffect(()=>{
-    
+  useEffect(() => {
+
     winter();
-  },[]);
-  const alertCount = useSelector((state)=>(state.alertCount));
-  const [id,setId] = useState('Logout');
-  const [temp,setTemp] = useState('0');
-  const [hum,setHum] = useState('0');
+  }, []);
+  const dispatch = useDispatch();
+  const alertCount = useSelector((state) => (state.alertCount));
+  const addList = useSelector((state) => (state.addReport));
+  const [id, setId] = useState('Logout');
+  const [temp, setTemp] = useState('0');
+  const [hum, setHum] = useState('0');
   const location = useLocation();
-  function winter(){
-    let url='https://api.openweathermap.org/data/2.5/weather?q=Gwangju&appid=c43b8b477c2f0c0412ba3e3e043024ec&units=metric&lang=kr'
+  function winter() {
+    let url = 'https://api.openweathermap.org/data/2.5/weather?q=Gwangju&appid=c43b8b477c2f0c0412ba3e3e043024ec&units=metric&lang=kr'
     fetch(url)
-    .then(res => res.json())
-    .then((out) => {
-      setTemp(out['main']['temp']);
-      setHum(out['main']['humidity']);
-      console.log('Checkout this JSON! ', out);
-    })
-    .catch(err => { throw err });
+      .then(res => res.json())
+      .then((out) => {
+        setTemp(out['main']['temp']);
+        setHum(out['main']['humidity']);
+        console.log('Checkout this JSON! ', out);
+      })
+      .catch(err => { throw err });
 
   }
+
+  useEffect(() => {
+    AddHtml();
+  }, [addList])
+
+  const AddHtml = () => {
+    // console.log('addHtml'+addList);
+    const arrtext = addList.substr(1).split(",");
+    let html = "";
+    for (let i = 0; i < arrtext.length; i++) {
+      html += arrtext[i];
+      // console.log('html'+html);
+    }
+    return (
+      <>
+        <Dropdown.Item
+          href="#pablo"
+          onClick={(e) => e.preventDefault()}
+          dangerouslySetInnerHTML={{ __html: html }}
+        >
+        
+        </Dropdown.Item>
+        {/* <tbody dangerouslySetInnerHTML={{ __html: html }}></tbody> */}
+      </>
+    );
+  };
 
   const mobileSidebarToggle = (e) => {
     e.preventDefault();
@@ -103,7 +131,7 @@ function Header() {
                 <span className="d-lg-none ml-1">Dashboard</span>
               </Nav.Link>
             </Nav.Item> */}
-            <Dropdown as={Nav.Item}>
+            <Dropdown as={Nav.Item}  onClick={()=>dispatch({type:'alertCountRe'})}>
               <Dropdown.Toggle
                 as={Nav.Link}
                 data-toggle="dropdown"
@@ -113,44 +141,16 @@ function Header() {
               >
                 <FontAwesomeIcon icon={faBell} style={
                   {
-                   marginTop:'7',
-                   fontSize:'20'
+                    marginTop: '7',
+                    fontSize: '20'
                   }
                 }></FontAwesomeIcon>
                 <span className="notification">{alertCount}</span>
                 <span className="d-lg-none ml-1">Notification</span>
               </Dropdown.Toggle>
               <Dropdown.Menu>
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  Notification 1
-                </Dropdown.Item>
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  Notification 2
-                </Dropdown.Item>
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  Notification 3
-                </Dropdown.Item>
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  Notification 4
-                </Dropdown.Item>
-                <Dropdown.Item
-                  href="#pablo"
-                  onClick={(e) => e.preventDefault()}
-                >
-                  Another notification
-                </Dropdown.Item>
+             
+                <AddHtml/>
               </Dropdown.Menu>
             </Dropdown>
             {/* <Nav.Item>
@@ -225,24 +225,24 @@ function Header() {
                 <i className="nc-icon nc-explore-2"></i>
                 <span className="pl-1">{temp} ℃</span>
               </Nav.Link>
-            </Nav.Item> 
+            </Nav.Item>
             <Nav.Item>
               <Nav.Link className="m-0">
                 <FontAwesomeIcon icon={faCloud} style={
                   {
-                   marginTop:'10'
+                    marginTop: '10'
                   }
                 }></FontAwesomeIcon>
                 <span className="pl-1">{hum} %</span>
               </Nav.Link>
-            </Nav.Item>   
+            </Nav.Item>
             <Nav.Item>
               <Nav.Link
                 className="m-0"
                 href="#pablo"
                 onClick={(e) => e.preventDefault()}
               >
-                <span className="no-icon">{id}</span>
+                <NavLink to={'/login'}><span className="no-icon">{id}</span></NavLink>
               </Nav.Link>
             </Nav.Item>
           </Nav>

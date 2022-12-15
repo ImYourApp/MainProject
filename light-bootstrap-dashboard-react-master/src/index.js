@@ -42,17 +42,39 @@ function reducer(currentState, action) {
     return {
       alertCount: 0,
       addReport: '',
-      chart1_power:'0'
-
+      chart3_power:'0',
+      chart3_time:'0'
     };
   }
   if (action.type == 'alertCount') {
     currentState.alertCount++;
   }
 
+  if (action.type == 'alertCountRe') {
+    currentState.alertCount = 0;
+  }
+
+  if (action.type == 'chart3') {
+    currentState.chart3_power= action.chart3_power,
+    currentState.chart3_time= action.chart3_time
+  }
+
   if (action.type == 'chart1') {
-    currentState.chart1_power= action.chart1_power,
-    currentState.chart1_time= action.chart1_time
+    if(action.chart1_1power){
+      currentState.chart1_1power= action.chart1_1power,
+      currentState.chart1_1label= action.chart1_1label
+    }
+    if(action.chart1_2power){
+      currentState.chart1_2power= action.chart1_2power,
+      currentState.chart1_2label= action.chart1_2label,
+      currentState.chart1_diDay= action.chart1_diDay
+    }
+   
+    // currentState.chart1_time= action.chart1_time
+  }
+  if (action.type == 'chart2') {
+    currentState.chart2_power= action.chart2_power
+    console.log(currentState.chart2_power+'디바이스 백분률');
   }
 
   if (action.type == 'addReport') {
@@ -63,6 +85,25 @@ function reducer(currentState, action) {
     // }
 
   }
+
+  if (action.type == 'login') {
+    console.log('리덕스 아이디'+action.loginId)
+    currentState.loginId=action.loginId
+    currentState.loginNick=action.loginNick,
+    console.log('리덕스 닉네임'+action.loginNick)
+    currentState.loginImage=action.loginImage 
+  }
+
+  if (action.type == 'editnick') {
+   
+    currentState.loginNick=action.newNick,
+
+    console.log(action.newNick)
+  }
+
+  // if(action.type =='device'){
+  //   if(action.select == '')
+  // }
   return { ...currentState };
 }
 

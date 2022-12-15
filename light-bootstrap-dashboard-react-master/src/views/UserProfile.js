@@ -1,8 +1,7 @@
 import React, { useState } from "react";
-
-import { 
-  MDBBadge, 
-  MDBListGroup, 
+import {
+  MDBBadge,
+  MDBListGroup,
   MDBListGroupItem,
   MDBCol,
   MDBRow,
@@ -12,7 +11,6 @@ import {
   MDBTabsContent,
   MDBTabsPane
  } from 'mdb-react-ui-kit';
-
 // react-bootstrap components
 import {
   Badge,
@@ -25,23 +23,25 @@ import {
   Row,
   Col,
 } from "react-bootstrap";
-
-import UserImage from "components/UserImage"; 
+import UserImage from "components/UserImage";
 import UserNick from "components/UserNick";
 import UserAlert from "components/UserAlert";
-
+import {useSelector} from 'react-redux';
+import { useEffect } from "react";
 function User() {
   const [justifyActive, setJustifyActive] = useState('tab1');
-
+  const userId = useSelector((state)=>(state.loginId))
+  const userNick = useSelector((state)=>(state.loginNick))
+  const userImage = useSelector((state)=>(state.loginImage))
   const handleJustifyClick = (value) => {
     if (value === justifyActive) {
       return;
     }
-
     setJustifyActive(value);
   };
-
-
+  // useEffect(()=>{
+  //   console.log('userNick:',userNick)
+  // },[userNick])
   return (
     <>
     {/* 유저 이름 카드 */}
@@ -62,11 +62,11 @@ function User() {
                     <img
                       alt="..."
                       className="avatar border-gray"
-                      src={require("assets/img/faces/face-0.jpg")}
+                      src={require("assets/img/faces/"+userImage+"")}
                     ></img>
-                    <h5 className="title">유저 이름</h5>
+                    <h5 className="title">{userNick}</h5>
                   {/* </a> */}
-                  <p className="description">아이디</p>
+                  <p className="description">{userId}</p>
                 </div>
                 {/* 프로필 내용 추가 가능 */}
                 {/* <p className="description text-center">
@@ -77,7 +77,6 @@ function User() {
               </Card.Body>
             </Card>
           </Col>
-
       {/* 설정 카드 */}
           <Col id="profilecardS" md="8">
             <Card>
@@ -102,7 +101,6 @@ function User() {
                   </MDBTabsLink>
                 </MDBTabsItem>
               </MDBTabs>
-
               <MDBTabsContent>
                 <MDBTabsPane show={justifyActive === 'tab1'}>
                   <UserImage></UserImage>
@@ -114,66 +112,13 @@ function User() {
                   <UserAlert></UserAlert>
                 </MDBTabsPane>
               </MDBTabsContent>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-              {/* <MDBListGroup style={{ minWidth: '11rem' }} light>
-              <MDBListGroupItem className='settingRight justify-content-between align-items-center'>
-              <Link to="usersetting">
-                <div className='d-flex align-items-center'>
-                  <img
-                    src='https://mdbootstrap.com/img/new/avatars/8.jpg'
-                    alt=''
-                    style={{ width: '45px', height: '45px' }}
-                    className='rounded-circle'
-                  />
-                  <div className='ms-3'>
-                    <p className='setting-bold mb-0'>계정</p>
-                  </div>
-                </div>
-              </Link>
-              </MDBListGroupItem>
-              <MDBListGroupItem className='settingRight justify-content-between align-items-center'>
-              <Link to="useralert">
-                <div className='d-flex align-items-center'>
-                  <img
-                    src='https://mdbootstrap.com/img/new/avatars/6.jpg'
-                    alt=''
-                    style={{ width: '45px', height: '45px' }}
-                    className='rounded-circle'
-                  />
-                  <div className='ms-3'>
-                    <p className='setting-bold mb-0' >알림</p>
-                  </div>
-                </div>
-              </Link>
-              </MDBListGroupItem>
-
-              </MDBListGroup> */}
-
               </Card.Body>
             </Card>
           </Col>
-          
         </Row>
-        
       </Container>
     </div>
     </>
   );
 }
-
 export default User;

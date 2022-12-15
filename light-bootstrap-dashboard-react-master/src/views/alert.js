@@ -36,7 +36,7 @@ function Notifications() {
       var color = Math.floor(Math.random() * 5 +1);
       let rcnt = Math.floor(Math.random()*alertText.length);
       var type;
-      let list = ["<tr><td>●</td><td>"+alertText[rcnt]+"</td><td></td></tr>"];
+      let list = ["<tr><td>● </td><td>"+alertText[rcnt]+"</td><td></td></tr>"];
       // ualertText.push(list);
       // setAlertCnt(rcnt);
       // setAlertText(list);

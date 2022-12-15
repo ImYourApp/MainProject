@@ -19,91 +19,57 @@ import Dashboard from "views/Dashboard.js";
 import UserProfile from "views/UserProfile.js";
 import TableList from "views/TableList.js";
 import Typography from "views/Typography.js";
-import Icons from "views/Icons.js";
+import Device from "views/Device.js";
 import Maps from "views/Maps.js";
 import Notifications from "views/Notifications.js";
 import Upgrade from "views/Upgrade.js";
-import Custimer from "views/Custimer";
+import Routine from "views/Routine.js";
 import Report from "views/Report";
 const dashboardRoutes = [
   {
-    upgrade: true,
-    path: "/upgrade",
-    name: "Upgrade to PRO",
-    icon: "nc-icon nc-alien-33",
-    component: Upgrade,
-    layout: "/admin"
-  },
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    icon: "nc-icon nc-chart-pie-35",
+    path: "/monitoring",
+    name: "MONITORING",
+    icon: "nc-icon nc-tv-2",
     component: Dashboard,
     layout: "/admin"
   },
   {
-    path: "/user",
-    name: "User Profile",
-    icon: "nc-icon nc-circle-09",
-    component: UserProfile,
+    path: "/device",
+    name: "DEVICE",
+    icon: "nc-icon nc-preferences-circle-rotate",
+    component: Device,
     layout: "/admin"
   },
   {
-    path: "/table",
-    name: "Table List",
-    icon: "nc-icon nc-notes",
+    path: "/routine",
+    name: "ROUTINE",
+    icon: "nc-icon nc-refresh-02",
     component: TableList,
     layout: "/admin"
   },
   {
-    path: "/typography",
-    name: "Typography",
+    path: "/info",
+    name: "ROUTINE_INFO",
     icon: "nc-icon nc-paper-2",
-    component: Typography,
-    layout: "/admin"
-  },
-  {
-    path: "/icons",
-    name: "Icons",
-    icon: "nc-icon nc-atom",
-    component: Icons,
-    layout: "/admin"
-  },
-  {
-    path: "/maps",
-    name: "Maps",
-    icon: "nc-icon nc-pin-3",
-    component: Maps,
-    layout: "/admin"
-  },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    icon: "nc-icon nc-bell-55",
-    component: Notifications,
-    layout: "/admin"
-  },
-  // {
-  //   path: "/alert",
-  //   name: "Notifications",
-  //   icon: "nc-icon nc-bell-55",
-  //   component: Notifications,
-  //   layout: "/admin"
-  // },
-  {
-    path: "/custimer",
-    name: "Custimer",
-    icon: "nc-icon nc-bell-55",
-    component: Custimer,
+    component: Routine,
     layout: "/admin"
   },
   {
     path: "/report",
-    name: "Report",
-    icon: "nc-icon nc-bell-55",
+    name: "REPORT",
+    icon: "nc-icon nc-chart-bar-32",
     component: Report,
     layout: "/admin"
-  }
+  },
+  {
+    path: "/mypage",
+    name: "MYPAGE",
+    icon: "nc-icon nc-circle-09",
+    component: UserProfile,
+    layout: "/admin"
+  },
+
+
 ];
 
 export default dashboardRoutes;

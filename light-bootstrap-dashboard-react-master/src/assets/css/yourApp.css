@@ -3,7 +3,7 @@
     font-family: 'NotoSans';
     src: url(../fonts/NotoSansKR-Regular.otf);
   }
-  
+  p,h1, .h1, h2, .h2, h3, .h3, h4, .h4 {    font-family: 'NotoSans' !important;}
   .login-main {
     font-family: 'NotoSans';
   }

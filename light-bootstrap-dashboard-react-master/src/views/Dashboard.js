@@ -1,13 +1,20 @@
 import React from "react";
 import ChartistGraph from "react-chartist";
-import { useState,Component,useRef,useEffect } from "react";
-import axios from 'axios';
-import DatePicker from 'react-datepicker';
+import { useState, Component, useRef, useEffect } from "react";
+import axios from "axios";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import ControlledSwitches from './switch.js';
-import NotificationAlert from "react-notification-alert";
-import { useDispatch,useSelector } from "react-redux";
-import Notifications from "./alert.js";
+import ControlledSwitches from '../components/Switch.js';
+import ControlledSwitches1 from '../components/DeviceSwitch.js';
+import { useDispatch, useSelector } from "react-redux";
+import Chart1 from "components/chart1.js";
+import Chart2 from "components/chart2.js";
+import Chart3 from "components/chart3.js";
+import ToggleButtonExample from 'components/toggle.js'
+import ApexChart from "components/ApexChart";
+import { faSmog, faTemperature0, faTemperatureArrowDown, faTemperatureArrowUp, faDroplet, faWind, faLightbulb, faPersonBooth, faPlug } from "@fortawesome/free-solid-svg-icons";
+import DropDown from "components/dropDown.js";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // react-bootstrap components
 import {
   Badge,
@@ -30,180 +37,243 @@ import {
 } from "react-bootstrap";
 import { notInitialized } from "react-redux/es/utils/useSyncExternalStore.js";
 import { forEachChild } from "typescript";
+
 const label = { inputProps: { 'aria-label': 'Switch demo' } };
-
-
 const Dashboard = () => {
-  const addList = useSelector((state)=>(state.addReport));
-  const [action,setAction] = useState('on');
-  const [time,setTime] = useState(["00시","02시","04시","06시","08시","10시","12시","14시","16시","18시","20시","22시","23시"]);
-  const [power,setPower] = useState([]);
-  const [mpower,setmPower] = useState('0');
-  const [wpower,setwPower] = useState('0');
-  const [deviceCnt,setDeviceCnt] = useState('0');
-  const [Maxpower,setMaxPower] = useState([5]);
-  const [weekend,setWeekend] = useState(['일','월','화','수','목','금','토']);
-  const [lastPower,setLastPower] = useState([]);
-  const [thisPower,setthisPower] = useState([]);
-  const [startDate, setStartDate] = useState(new Date('2016-01-01'));
-  const [endDate, setEndDate] = useState(new Date('2016-01-01'));
-  useEffect(()=>{
+  const addList = useSelector((state) => (state.addReport));
+  const dispatch = useDispatch();
+  const [cate, setmCate] = useState('3층');
+  const [power, setPower] = useState([]);
+  const [mpower, setmPower] = useState('0');
+  const [wpower, setwPower] = useState('0');
+  const [deviceCnt, setDeviceCnt] = useState('0');
+  const [startDate, setStartDate] = useState(new Date('2016-02-01'));
+  const [endDate, setEndDate] = useState(new Date('2016-02-01'));
+  const icon = { '에어컨': faTemperatureArrowDown, '히터': faTemperatureArrowUp, '가습기': faDroplet, '환풍기': faWind, '스마트조명': faLightbulb, '스마트블라인드': faPersonBooth }
+  const [deviceData, setDeviceData] = useState([]);
+
+  useEffect(() => {
+
     loadPower();
-    greetData('wPower');
-    greetData('mPower');
-    greetData('device');
+    greetData("wPower");
+    greetData("mPower");
+    greetData("device");
+    greetData("wPowerChk1");
+    greetData("wPowerChk2");
+    greetData('deviceUse');
+    getDeviceList();
+  }, []);
+
+  useEffect(() => {
+    AddHtml();
+  }, [addList])
+
+  useEffect(() => {
+    getDeviceList();
+  }, [cate])
+
+  useEffect(() => {
     greetData('wPowerChk1');
     greetData('wPowerChk2');
-  },[])
+    greetData('deviceUse');
+  }, [endDate])
 
-  useEffect(()=>{
-    AddHtml();
-  },[addList])
-
-  const loadPower = ()=>{
+  const loadPower = () => {
 
     console.log('loadPower function')
-    if(power.length == 0){
+    if (power.length == 0) {
 
-      axios.post('http://127.0.0.1:3001/db',{
-        type:'power'
+      axios.post('http://127.0.0.1:3001/db', {
+        type: 'power'
       })
-      .then((res)=>{
-          
+        .then((res) => {
+
           console.log('성공');
-          setTime(res.data.time);
-          setPower(res.data.power);
-          setMaxPower(res.data.maxVal);
-          console.log(time);
-          console.log(power);
-          console.log(Maxpower);
-        
-      })
-      .catch(()=>{console.log('살패')})
+          dispatch({ type: 'chart3', chart3_power: res.data.power, chart3_time: res.data.time });
+
+        })
+        .catch(() => { console.log('살패') })
     }
-  }
+  };
 
   function greetData(type) {
-    axios.post('http://127.0.0.1:3001/total',{
-      type:type
+
+    let d1 = new Date(endDate);
+    let d2 = new Date(startDate);
+
+    console.log((d1.getDate() - d2.getDate()) + '빼기날자');
+    let DateData = {
+      start: startDate,
+      end: endDate,
+      diDay: d1.getDate() - d2.getDate()
+    }
+    axios.post('http://127.0.0.1:3001/total', {
+      type: type,
+      date: DateData
     })
-    .then((res)=>{
-        
+      .then((res) => {
+
         console.log('성공');
 
-        if(type=='mPower'){
+        if (type == "mPower") {
           setmPower(res.data.power);
           console.log(mpower);
-        }else if(type=='wPower'){
+        } else if (type == "wPower") {
           setwPower(res.data.power);
           console.log(wpower);
-        }else if(type=='device'){
+        } else if (type == "device") {
           setDeviceCnt(res.data.device);
           console.log(deviceCnt);
-        }else if(type=='wPowerChk1'){
+        } else if (type == "wPowerChk1") {
           //이번주
-          console.log('이번주'+res.data.power);
-          setthisPower(res.data.power);
+          console.log('이번주' + res.data.power);
+          dispatch({ type: 'chart1', chart1_1power: res.data.power, chart1_1label: res.data.label });
+          // setthisPower(res.data.power);
           // console.log('이번주'+thisPower);
-        }else if(type=='wPowerChk2'){
+        } else if (type == "wPowerChk2") {
           // const wPowe = res.data.power; //지난주
-          setLastPower(res.data.power);
-          console.log('지난주'+res.data.power);
+          // setLastPower(res.data.power);
+          dispatch({ type: 'chart1', chart1_2power: res.data.power, chart1_2label: res.data.label, chart1_diDay: res.data.did });
+          console.log('지난주' + res.data.power);
+        } else if (type == "deviceUse") {
+          dispatch({ type: 'chart2', chart2_power: res.data.power });
+          // console.log('디바이스 사용률'+res.data.power);
         }
-    })
-    .catch(()=>{console.log('살패')})
+
+      })
+      .catch(() => { console.log('살패') })
   }
 
 
-  const AddHtml=() =>{
+
+  const AddHtml = () => {
     // console.log('addHtml'+addList);
-    const arrtext = addList.substr(1).split(',');
-    let html = ''
-    for(let i =0; i < arrtext.length;i++){
-      html+=arrtext[i];
+    const arrtext = addList.substr(1).split(",");
+    let html = "";
+    for (let i = 0; i < arrtext.length; i++) {
+      html += arrtext[i];
       // console.log('html'+html);
     }
-    return(
-      <>
-        <tbody dangerouslySetInnerHTML={{ __html: html }} ></tbody>
-      </>
-    );
-  }
-
-
-  const DatePickerComponent = () => {
-    console.log('달력');
-
-    let refStartd = useRef();
-    let refEndd = useRef();
-    let DateData ={
-      start : startDate,
-      end : endDate
-    }
-    function dateAxios(){
-      console.log(DateData.start);
-      axios.post('http://127.0.0.1:3001/db',{
-        date:DateData,
-        type:'power'
-      })
-      .then((res)=>{
-          console.log('성공');
-          // let dt = new Date(endDate);
-          // dt = dt.getFullYear() + "-" + (dt.getMonth() + 1) + "-" + dt.getDate();
-          
-          setTime(res.data.time);
-          setPower(res.data.power);
-          setMaxPower(res.data.maxVal);
-
-          // setStartDate(res.data.strdate);
-          // setEndDate(dt);
-          // console.log(dt+'이엔드1!!');
-          console.log(time);
-          console.log(power);
-          console.log(Maxpower);
-        
-      })
-      .catch(()=>{console.log('살패')})
-    }
-  
     return (
       <>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
-            selectsStart
-            startDate={startDate}
-            endDate={endDate}
-            name='strDate'
-            ref={refStartd}
-            dateFormat="yyyy-MM-dd"
-          />
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
-            selectsEnd
-            startDate={startDate}
-            endDate={endDate}
-            minDate={startDate}
-            name='endDate'
-            ref={refEndd}
-            dateFormat="yyyy-MM-dd"
-          />
-          <Button
-            className="btn-fill pull-right"
-            type="button"
-            variant="info"
-            style={{
-              lineHeight:0.7
-            }}
-            onClick={()=>dateAxios()}
-          >
-            조회
-          </Button>
+        <tbody dangerouslySetInnerHTML={{ __html: html }}></tbody>
       </>
     );
   };
-  console.log('111111');
+
+  const DatePickerComponent = () => {
+    let refStartd = useRef();
+    let refEndd = useRef();
+    let DateData = {
+      start: startDate,
+      end: endDate
+    }
+
+    function dateAxios() {
+      axios.post('http://127.0.0.1:3001/db', {
+        date: DateData,
+        type: 'power'
+      })
+        .then((res) => {
+          console.log('성공');
+          dispatch({ type: 'chart3', chart3_power: res.data.power, chart3_time: res.data.time });
+        })
+        .catch(() => { console.log('살패') })
+    }
+
+    return (
+      <>
+        <DatePicker
+          selected={startDate}
+          onChange={(date) => setStartDate(date)}
+          selectsStart
+          startDate={startDate}
+          endDate={endDate}
+          name='strDate'
+          ref={refStartd}
+          dateFormat="yyyy-MM-dd"
+        />
+        <DatePicker
+          selected={endDate}
+          onChange={(date) => setEndDate(date)}
+          selectsEnd
+          startDate={startDate}
+          endDate={endDate}
+          minDate={startDate}
+          name='endDate'
+          ref={refEndd}
+          dateFormat="yyyy-MM-dd"
+        />
+        <Button
+          className="btn-fill pull-right"
+          type="button"
+          variant="info"
+          style={{
+            lineHeight: 1.2
+          }}
+          onClick={() => dateAxios()}
+        >
+          조회
+        </Button>
+      </>
+    );
+  };
+
+  function getDeviceList() {
+    let deviceData = {
+      type: 'list',
+      cate:cate
+    }
+    axios.post('http://127.0.0.1:3001/device', {
+      data: deviceData
+    })
+      .then((res) => {
+        if (res.data.result == 'success') {
+          // setDeviceData(res.data.row);
+          listDevice(res.data.row)
+          console.log('가져오기')
+        } else {
+          console.log('가져오기실패')
+        }
+
+      }).catch(() => { console.log('살패') })
+  }
+
+  function listDevice(data) {
+    let device = data.map((val, index) => {
+      let dIcon = faPlug
+      let ckName = val.DEVICE_NAME;
+      if (String(val.DEVICE_NAME).indexOf('_') > 0) {
+        ckName = String(val.DEVICE_NAME).split('_')[0];
+      }
+
+      if (icon[ckName]) {
+        dIcon = icon[ckName]
+      }
+      let state = val.DEVICE_STATUS == 'OFF' ? false : true
+      return (
+        <Col key={index} className="font-icon-list" lg="3" md="3" sm="4" xs="6">
+          <div className="device_list">
+            <a href='#' onClick={() => {
+              // setShowModal(true);
+              // setDeviceUid(val.DEVICE_UID);
+              // setDeviceName(val.DEVICE_NAME);
+              // setDeviceDate(val.REG_DATE);
+              // setDeviceSeq(val.DEVICE_SEQ)
+            }} name='nc-align-left-2'>
+              <FontAwesomeIcon icon={dIcon} />
+              <p>{val.DEVICE_NAME}{state}</p>
+            </a>
+            <p align="center"><ControlledSwitches1 state={state} uid={val.DEVICE_SEQ} name={val.DEVICE_NAME} /></p>
+          </div>
+        </Col>)
+    }
+
+    )
+    // console.log(device);
+    setDeviceData(device);
+  }
+
   return (
     <>
       <Container fluid>
@@ -219,7 +289,7 @@ const Dashboard = () => {
                   </Col>
                   <Col xs="7">
                     <div className="numbers">
-                      <p className="card-category">이달 총 사용전력량</p>
+                      <p className="card-category">이달 전력 총 사용량</p>
                       <Card.Title as="h5">{mpower} kw</Card.Title>
                     </div>
                   </Col>
@@ -228,9 +298,12 @@ const Dashboard = () => {
               <Card.Footer>
                 <hr></hr>
                 <div className="stats">
-                  <Button className="border-0 p-1" onClick={() => greetData("mPower")}>
-                  <i className="fas fa-redo mr-1"></i>
-                  Update Now
+                  <Button
+                    className="border-0 p-1"
+                    onClick={() => greetData("mPower")}
+                  >
+                    <i className="fas fa-redo mr-1"></i>
+                    Update Now
                   </Button>
                 </div>
               </Card.Footer>
@@ -247,7 +320,7 @@ const Dashboard = () => {
                   </Col>
                   <Col xs="7">
                     <div className="numbers">
-                      <p className="card-category">주간 총사용전력량</p>
+                      <p className="card-category">주간 전력 총 사용량</p>
                       <Card.Title as="h5">{wpower} kw</Card.Title>
                     </div>
                   </Col>
@@ -256,7 +329,10 @@ const Dashboard = () => {
               <Card.Footer>
                 <hr></hr>
                 <div className="stats">
-                  <Button className="border-0 p-1" onClick={() => greetData("wPower")}>
+                  <Button
+                    className="border-0 p-1"
+                    onClick={() => greetData("wPower")}
+                  >
                     <i className="fas fa-redo mr-1"></i>
                     Update Now
                   </Button>
@@ -275,8 +351,8 @@ const Dashboard = () => {
                   </Col>
                   <Col xs="7">
                     <div className="numbers">
-                      <p className="card-category">사용중인 디아비스</p>
-                      <Card.Title as="h5">{deviceCnt}대 가동중</Card.Title>
+                      <p className="card-category">전달대비 전력사용</p>
+                      <Card.Title as="h5">+6% 사용</Card.Title>
                     </div>
                   </Col>
                 </Row>
@@ -298,13 +374,13 @@ const Dashboard = () => {
                 <Row>
                   <Col xs="5">
                     <div className="icon-big text-center icon-warning">
-                      <i className="nc-icon nc-favourite-28 text-primary"></i>
+                      <i className="nc-icon nc-preferences-circle-rotate text-primary"></i>
                     </div>
                   </Col>
                   <Col xs="7">
                     <div className="numbers">
-                      <p className="card-category">직원만족도</p>
-                      <Card.Title as="h5">10%</Card.Title>
+                      <p className="card-category">사용중인 디바이스</p>
+                      <Card.Title as="h5">{deviceCnt}대 가동중</Card.Title>
                     </div>
                   </Col>
                 </Row>
@@ -312,8 +388,9 @@ const Dashboard = () => {
               <Card.Footer>
                 <hr></hr>
                 <div className="stats">
-                  <Button className="border-0 p-1 line-he">
+                  <Button className="border-0 p-1 line-he" onClick={() => greetData("device")}>
                     <i className="fas fa-redo mr-1"></i>
+
                     Update Now
                   </Button>
                 </div>
@@ -322,64 +399,16 @@ const Dashboard = () => {
           </Col>
         </Row>
         <Row>
-          <Col md="12">
+          <Col md="6">
             <Card>
               <Card.Header>
-                <Card.Title as="h4">총 전력사용량</Card.Title>
-                <p className="card-category">24 Hours performance</p>
-                <DatePickerComponent/>
+                <Card.Title as="h4" className="mb-2">전력 총 사용량</Card.Title>
+                <DatePickerComponent />
               </Card.Header>
               <Card.Body>
-                <div className="ct-chart" id="chartHours">
-                  <ChartistGraph
-                    data={{
-                      labels:time,
-                      series: [
-                        power,
-                        // [287, 385, 490, 492, 554, 586, 698, 695],
-                        // [67, 152, 143, 240, 287, 335, 435, 437],
-                        // [23, 113, 67, 108, 190, 239, 307, 308],
-                      ],
-                    }}
-                    type="Line"
-                    options={{
-                      low: 0,
-                      high: Maxpower,
-                      showArea: false,
-                      height: "245px",
-                      axisX: {
-                        showGrid: false,
-                      },
-                      lineSmooth: true,
-                      showLine: true,
-                      showPoint: true,
-                      fullWidth: true,
-                      chartPadding: {
-                        right: 50,
-                      },
-                    }}
-                    responsiveOptions={[
-                      [
-                        "screen and (max-width: 640px)",
-                        {
-                          axisX: {
-                            labelInterpolationFnc: function (value) {
-                              return value[0];
-                            },
-                          },
-                        },
-                      ],
-                    ]}
-                  />
-                </div>
+                <Chart3 />
               </Card.Body>
               <Card.Footer>
-                <div className="legend">
-                  <i className="fas fa-circle text-info"></i>
-                  Open <i className="fas fa-circle text-danger"></i>
-                  Click <i className="fas fa-circle text-warning"></i>
-                  Click Second Time
-                </div>
                 <hr></hr>
                 <div className="stats">
                   <i className="fas fa-history"></i>
@@ -388,188 +417,172 @@ const Dashboard = () => {
               </Card.Footer>
             </Card>
           </Col>
+          <Col md="6">
+            <Card>
+              <Card.Header>
+                <Card.Title as="h4">
+                  Room 실시간 정보
+                  <DropDown/>
+                </Card.Title>
+              </Card.Header>
+              <Card.Body className="all-icons" style={{ paddingTop: 0 }}>
+                <Row>
+                  <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                    <div className="room_list ">
+                      <h5>사장실 루틴<span className="rbtn"><ControlledSwitches /></span></h5>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faSmog} />
+                        <p>441</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faTemperature0} />
+                        <p>26 ℃</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faDroplet} />
+                        <p>26 %</p>
+                      </Col>
+                    </div>
+                  </Col>
+                  <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                    <div className="room_list ">
+                      <h5>사무실 루틴<span className="rbtn"><ControlledSwitches /></span></h5>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faSmog} />
+                        <p>342</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faTemperature0} />
+                        <p>24 ℃</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faDroplet} />
+                        <p>13 %</p>
+                      </Col>
+                      <p>
+                        {/* 루틴3 ON */}
+                      </p>
+                    </div>
+                  </Col>
+                  <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                    <div className="room_list ">
+                      <h5>휴게실 루틴<span className="rbtn"><ControlledSwitches /></span></h5>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faSmog} />
+                        <p>380</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faTemperature0} />
+                        <p>25 ℃</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faDroplet} />
+                        <p>16 %</p>
+                      </Col>
+                      <p>
+                        {/* 루틴3 ON */}
+                      </p>
+                    </div>
+                  </Col>
+                  <Col className="font-icon-list" lg="6" md="3" sm="12" xs="12">
+                    <div className="room_list ">
+                      <h5>회의실 루틴<span className="rbtn"><ControlledSwitches /></span></h5>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faSmog} />
+                        <p>234</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faTemperature0} />
+                        <p>28 ℃</p>
+                      </Col>
+                      <Col lg='4' className="sensing_info">
+                        <FontAwesomeIcon icon={faDroplet} />
+                        <p>22 %</p>
+                      </Col>
+                      {/* <ToggleButtonExample/> */}
+                      <p>
+                        {/* 루틴3 ON */}
+                      </p>
+                    </div>
+                  </Col>
+
+                </Row>
+
+              </Card.Body>
+            </Card>
+          </Col>
         </Row>
         <Row>
           <Col md="4">
-              <Card>
-                <Card.Header>
-                  <Card.Title as="h4">디바이스 전력사용 통계</Card.Title>
-                  <p className="card-category">Last Campaign Performance</p>
-                </Card.Header>
-                <Card.Body>
-                  <div
-                    className="ct-chart ct-perfect-fourth"
-                    id="chartPreferences"
-                  >
-                    <ChartistGraph
-                      data={{
-                        labels: ["20%", "20%", "40%", "10%","10%"],
-                        series: [20, 20, 40,10,10],
-                      }}
-                      type="Pie"
-                    />
-                  </div>
-                  <div className="legend">
-                    <i className="fas fa-circle text-info"></i>
-                    TV <i className="fas fa-circle text-danger"></i>
-                    에어컨 <i className="fas fa-circle text-warning"></i>
-                    가습기<i className="fas fa-circle text-green"></i>
-                    정수기<i className="fas fa-circle text-purple"></i>
-                    컴퓨터
-                  </div>
-                  <hr></hr>
-                  <div className="stats">
-                    <i className="far fa-clock"></i>
-                    Campaign sent 2 days ago
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md="8">
-              <Card>
-                <Card.Header>
-                  <Card.Title as="h4">디바이스 관리</Card.Title>
-                  <p className="card-category">Last Campaign Performance</p>
-                </Card.Header>
-                <Card.Body className="all-icons">
-
-                  {/* <Dropdown as={ButtonGroup} className={"mr-2 "+action}>
-                    <button type="button" className="btn btn-danger">TV</button>
-                    <Dropdown.Toggle variant="btn btn-danger dropdown-toggle dropdown-toggle-split" id="dropdownMenuSplitButton2">
-                      <span className="sr-only">Toggle Dropdown</span>
+            <Card>
+              <Card.Header>
+                <Card.Title as="h4">디바이스별 전력사용률</Card.Title>
+              </Card.Header>
+              <Card.Body>
+                <Chart2 />
+              </Card.Body>
+            </Card>
+          </Col>
+          <Col md="8">
+            <Card>
+              <Card.Header>
+                <Card.Title as="h4">
+                  디바이스 관리
+                  <Dropdown className="float-right"  as={Nav.Item}>
+                    <Dropdown.Toggle
+                      aria-expanded={false}
+                      aria-haspopup={true}
+                      as={Nav.Link}
+                      data-toggle="dropdown"
+                      id="navbarDropdownMenuLink"
+                      variant="default"
+                      className="m-0"
+                    >
+                      <span className="no-icon">{cate}</span>
                     </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item>Settings</Dropdown.Item>
+                    <Dropdown.Menu  aria-labelledby="navbarDropdownMenuLink">
+                      <Dropdown.Item
+                        href="#pablo"
+                        onClick={(e) => {setmCate('1층');e.preventDefault()}}
+                      >
+                        1층
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        href="#pablo"
+                        onClick={(e) => {setmCate('2층');e.preventDefault()}}
+                      >
+                        2층
+                      </Dropdown.Item>
+                      <Dropdown.Item
+                        href="#pablo"
+                        onClick={(e) => {setmCate('3층');e.preventDefault()}}
+                      >
+                        3층
+                      </Dropdown.Item>
+
                     </Dropdown.Menu>
                   </Dropdown>
-                  <Dropdown as={ButtonGroup} className="mr-2">
-                    <button type="button" className="btn btn-danger">에어컨</button>
-                    <Dropdown.Toggle variant="btn btn-danger dropdown-toggle dropdown-toggle-split" id="dropdownMenuSplitButton2">
-                      <span className="sr-only">Toggle Dropdown</span>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item>Settings</Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>
-                  <Dropdown as={ButtonGroup} className="mr-2">
-                    <button type="button" className="btn btn-danger">가습기</button>
-                    <Dropdown.Toggle variant="btn btn-danger dropdown-toggle dropdown-toggle-split" id="dropdownMenuSplitButton2">
-                      <span className="sr-only">Toggle Dropdown</span>
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      <Dropdown.Item>Settings</Dropdown.Item>
-                    </Dropdown.Menu>
-                  </Dropdown>                  */}
-                  <Row>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-air-baloon"></i>
-                        <p>에어컨</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-album-2"></i>
-                        <p>히터</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-air-baloon"></i>
-                        <p>가습기</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-album-2"></i>
-                        <p>환풍기</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-air-baloon"></i>
-                        <p>조명</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-album-2"></i>
-                        <p>블라인드</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-air-baloon"></i>
-                        <p>블라인드2</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                    <Col className="font-icon-list" lg="3" md="3" sm="4" xs="6">
-                      <div className="device_list">
-                        <i className="nc-icon nc-album-2"></i>
-                        <p>스마트플러그</p>
-                        <ControlledSwitches />
-                      </div>
-                    </Col>
-                  </Row>
+                </Card.Title>
+              </Card.Header>
+              <Card.Body className="all-icons">
+                <Row>
+                  {deviceData}
+                </Row>
 
-                </Card.Body>
-              </Card>
-            </Col>
+              </Card.Body>
+            </Card>
+          </Col>
         </Row>
         <Row>
           <Col md="6">
             <Card>
               <Card.Header>
-                <Card.Title as="h4">한주 전력비교</Card.Title>
-                <p className="card-category">All products including Taxes</p>
+                <Card.Title as="h4">과거 전력 사용량 비교</Card.Title>
               </Card.Header>
               <Card.Body>
-                <div className="ct-chart" id="chartActivity">
-                  <ChartistGraph
-                    data={{
-                      labels:weekend,
-                      series: [
-                       thisPower,
-                       lastPower
-                      ],
-                    }}
-                    type="Bar"
-                    options={{
-                      seriesBarDistance: 10,
-                      axisX: {
-                        showGrid: false,
-                      },
-                      height: "245px",
-                    }}
-                    responsiveOptions={[
-                      [
-                        "screen and (max-width: 640px)",
-                        {
-                          seriesBarDistance: 5,
-                          axisX: {
-                            labelInterpolationFnc: function (value) {
-                              return value[0];
-                            },
-                          },
-                        },
-                      ],
-                    ]}
-                  />
-                </div>
+                <Chart1 />
               </Card.Body>
               <Card.Footer>
-                <div className="legend">
-                  <i className="fas fa-circle text-info"></i>
-                  이번주 사용 전력량 <i className="fas fa-circle text-danger"></i>
-                  지난주 사용 전력량
-                </div>
                 <hr></hr>
                 <div className="stats">
                   <i className="fas fa-check"></i>
@@ -582,12 +595,11 @@ const Dashboard = () => {
             <Card className="card-tasks">
               <Card.Header>
                 <Card.Title as="h4">최신 주요 리포트</Card.Title>
-                <p className="card-category">Backend development</p>
               </Card.Header>
               <Card.Body>
                 <div className="table-full-width">
                   <Table>
-                      <AddHtml/>
+                    <AddHtml />
                   </Table>
                 </div>
               </Card.Body>
@@ -604,6 +616,6 @@ const Dashboard = () => {
       </Container>
     </>
   );
-}
+};
 
 export default Dashboard;

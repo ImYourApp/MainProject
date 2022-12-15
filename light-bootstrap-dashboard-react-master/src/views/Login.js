@@ -15,8 +15,8 @@ import {
   from 'mdb-react-ui-kit';
 import axios from 'axios';
 import { useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-
+import { Link ,NavLink,useHistory } from 'react-router-dom';
+import {useDispatch} from 'react-redux';
 
 function Login() {
   const refId = useRef();
@@ -24,7 +24,14 @@ function Login() {
   const [idError, setIdError] = useState(false);
   const [pwError, setPwError] = useState(false);
   const [logError, setLogError] = useState(false);
-
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const handleOnKeyPress = e => {
+    if (e.key === 'Enter') {
+      sendLogin(); // Enter 입력이 되면 클릭 이벤트 실행
+    }
+  };
+  // 인풋에 적용할 Enter 키 입력 함수
   function sendLogin() {
     const id = refId.current.value
     const pw = refPw.current.value
@@ -59,9 +66,12 @@ function Login() {
         .then((res) => {
           console.log(res.data.result)
           if (res.data.result == "로그인성공") {
-            console.log('aa')
-
-            window.location.href = '/admin/dashboard';
+            // //영인
+            dispatch({type:'login',loginId:res.data.userId,loginNick:res.data.userNick,loginImage:res.data.userImage})
+            // console.log(res.data.userId+'로그인아이디11')
+            // //
+            // window.location.href = '/admin/dashboard';
+            history.push('/admin/monitoring');
           } else if (res.data.result == "로그인실패") {
             setLogError(true);
             console.log('aaa')
@@ -105,7 +115,8 @@ function Login() {
 
                 <MDBInput wrapperClass='mb-2' label='아이디' id='form3' type='ID' inputRef={refId} />
                 {idError ? <h6 Class='mb-3' style={{color:"red"}}>&nbsp;ID를 입력하세요</h6> : <br></br>}
-                <MDBInput wrapperClass='mb-2' label='비밀번호' id='form4' type='password' inputRef={refPw} />
+                <MDBInput wrapperClass='mb-2' label='비밀번호' id='form4' type='password' inputRef={refPw} onKeyPress={handleOnKeyPress} // Enter 입력 이벤트 함수
+                />
                 {pwError ? <h6 Class='mb' style={{color:"red"}}>&nbsp;비밀번호를 입력하세요</h6> : <br></br>}
 
                 {logError ? <h6 Class='mb-3' style={{color:"red"}}>&nbsp;아이디 또는 비밀번호를 잘못 입력했습니다.</h6> : <br></br>}
